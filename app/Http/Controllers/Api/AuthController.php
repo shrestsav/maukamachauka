@@ -14,6 +14,7 @@ use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Hash;
 
 use Mail;
 use App\Mail\notifyMail;
@@ -51,16 +52,16 @@ class AuthController extends Controller
         //Assign User as user
         $user->attachRole($role_id);
 
-        return response()->json([
-            'message' => 'User Registered Successfully'
-        ]);
+        $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+        
+        return response()->json($response);
     }
 
     public function login(Request $request)
     {   
         $validator = Validator::make($request->all(), [
             'email'        => 'required|string|email|max:255|exists:users',
-            'password'     => 'required|max:255|string'
+            'password'     => 'required|max:255|string',
             'device_id'    => 'required',
             'device_token' => 'required'
         ]);
@@ -73,17 +74,24 @@ class AuthController extends Controller
             ], 422);
         }
 
+        $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+
+        return response()->json($response);
+    }
+
+    public function generateToken($email, $password, $device_id, $device_token)
+    {
         $url = url('').'/oauth/token';
-        $user = User::where('email',$request->email)->firstOrFail();
+        $user = User::where('email',$email)->firstOrFail();
     
         $http = new \GuzzleHttp\Client();
         $response = $http->post(url('').'/oauth/token', [
                         'form_params' => [
                             'grant_type'    => 'password',
                             'client_id'     => 2,
-                            'client_secret' => 'wNfEEpIS6VUHVZKVhgUWGNjcNTUvkd5gGtsnCgnb',
-                            'username'      => $request->email,
-                            'password'      => $request->password,
+                            'client_secret' => 'iMW9m2tB1h2RMANtE0DPCcNrZs6nG8yRFaBwK3y5',
+                            'username'      => $email,
+                            'password'      => $password,
                             'scope'         => '',
                         ],
                         'http_errors' => true // add this to return errors in json
@@ -92,8 +100,8 @@ class AuthController extends Controller
         $token_response = json_decode((string) $response->getBody(), true);
 
         
-        $check = DeviceToken::where('device_id',$request->device_id)
-                            ->where('device_token',$request->device_token);
+        $check = DeviceToken::where('device_id',$device_id)
+                            ->where('device_token',$device_token);
 
         //If both device_id and device_token exists                           
         if($check->exists()){
@@ -106,11 +114,11 @@ class AuthController extends Controller
         else{
             $deviceToken = DeviceToken::updateOrCreate(
                         [
-                            'device_id' => $request->device_id
+                            'device_id' => $device_id
                         ],
                         [
                             'user_id'      => $user->id,
-                            'device_token' => $request->device_token
+                            'device_token' => $device_token
                         ]
                     );
         }
@@ -120,9 +128,8 @@ class AuthController extends Controller
             'user_id'  =>  $user->id
         ];
 
-        return response()->json($result);
+        return $result;
     }
-
     public function createProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [

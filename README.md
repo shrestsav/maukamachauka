@@ -1,5 +1,6 @@
-# GO-RINSE
-Web Application in Laravel, VueJS, MySQL and Firebase to manage orders of users for dry cleaning and other services
+# MAUKA MA CHAUKA
+Web Application in Laravel, VueJS, MySQL to post new local offers from our community
+Backend API for mobile application in react native
 
 Migrate DB
 php artisan db:seed --class=PermissionSeeder

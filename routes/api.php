@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::post('/register','Api\AuthController@register');
+Route::post('/login','Api\AuthController@login');
 Route::post('/verifyOTP','Api\AuthController@verifyOTP');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
