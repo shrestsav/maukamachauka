@@ -57,7 +57,7 @@ class AuthController extends Controller
         // }
 
         $user->sendEmailVerificationNotification();
-        
+
         // $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
         
         return response()->json([
@@ -82,6 +82,14 @@ class AuthController extends Controller
             ], 422);
         }
 
+        $user = User::where('email',$request->email)->first();
+        if(!Hash::check($request['password'], $user->getAuthPassword())){
+            return response()->json([
+                'status'   =>  '401',
+                'message'  =>  'Password doesnot match'
+            ],401);
+        }
+        
         $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
 
         return response()->json($response);
@@ -102,7 +110,7 @@ class AuthController extends Controller
                             'password'      => $password,
                             'scope'         => '',
                         ],
-                        'http_errors' => true // add this to return errors in json
+                        'http_errors' => false // add this to return errors in json
                     ]);
 
         $token_response = json_decode((string) $response->getBody(), true);
