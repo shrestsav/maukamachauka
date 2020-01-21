@@ -56,9 +56,9 @@ class AuthController extends Controller
         //     return redirect($this->redirectPath());
         // }
 
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
-        // $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+        $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
         
         return response()->json([
             'message'   =>  'Verification Email has been sent'
