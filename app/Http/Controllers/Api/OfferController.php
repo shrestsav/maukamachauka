@@ -29,7 +29,12 @@ class OfferController extends Controller
 
         $offers->setCollection( $offers->getCollection()->makeHidden(['brand_id','category_id']));
 
-        return response()->json($offers);
+        $categories = Category::select('id','name','image')->where('status',1)->get();
+
+        return response()->json([
+            'offers'      =>  $offers,
+            'categories'  =>  $categories
+        ]);
     }
 
     /**
