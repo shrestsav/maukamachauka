@@ -10,8 +10,6 @@ class Category extends Model
 
     protected $appends = ['image_src'];
 
-    protected $hidden = ['image_src'];
-
     public function items()
     {
         return $this->hasMany(Item::class);
@@ -35,8 +33,8 @@ class Category extends Model
 
     public function getImageSrcAttribute()
     {
-  		$src = $this->image ? asset('files/categories/'.$this->image) : asset('files/categories/no_image.png');
+  		// $src = $this->image ? asset('files/categories/'.$this->image) : asset('files/categories/no_image.png');
   		
-        return $src;
+        return "https://loremflickr.com/320/240";
     }
 }

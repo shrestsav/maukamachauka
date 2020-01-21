@@ -17,8 +17,8 @@ class FakeDataSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        $totalCat = 12;
-        $totalBrand = 50;
+        $totalCat = 10;
+        $totalBrand = 20;
         $totalOffer = 200;
 
         for ($i = 1; $i <= $totalCat; $i++) {
@@ -44,7 +44,7 @@ class FakeDataSeeder extends Seeder
             Offer::create([ 
                 'brand_id'    => rand(1,$totalBrand),
                 'category_id' => rand(1,$totalCat),
-                'name' 		  => $faker->name,
+                'title' 		  => $faker->name,
                 'description' => $faker->text,
                 'image' 	  => 'empty',
                 'status' 	  => 1,
