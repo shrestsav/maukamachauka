@@ -52,9 +52,17 @@ class AuthController extends Controller
         //Assign User as user
         $user->attachRole($role_id);
 
-        $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+        // if ($request->user()->hasVerifiedEmail()) {
+        //     return redirect($this->redirectPath());
+        // }
+
+        $user->sendEmailVerificationNotification();
         
-        return response()->json($response);
+        // $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+        
+        return response()->json([
+            'message'   =>  'Verification Email has been sent'
+        ]);
     }
 
     public function login(Request $request)

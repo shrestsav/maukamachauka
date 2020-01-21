@@ -51,6 +51,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $exception = $this->prepareException($exception);
         //Exceptions for API calls
         if($request->expectsJson()){
             if($exception instanceof NotFoundHttpException){
@@ -68,13 +69,13 @@ class Handler extends ExceptionHandler
             if($exception instanceof ClientException){
                 return response()->json([
                     'status' => '401',
-                    'errors' => 'Code Error, Your code may have expired or doesnot match. Please try resending the code'
+                    'errors' => $exception->getMessage()
                 ], 401);
             }
             if($exception instanceof HttpException){
                 return response()->json([
                     'status' => '403',
-                    'errors' => 'Forbidden'
+                    'errors' => $exception->getMessage()
                 ], 403);
             }
         }
