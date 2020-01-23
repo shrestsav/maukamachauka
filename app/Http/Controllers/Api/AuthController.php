@@ -90,6 +90,7 @@ class AuthController extends Controller
         if(is_null($user->email_verified_at)){
             return response()->json([
                 'status'   =>  '403',
+                'type'     =>  'unverifiedEmail',
                 'message'  =>  'Your email has not been verified yet. You can request for another verification email.',
                 'url'      =>   url('/request-verification/'.$user->id)
             ],401);
