@@ -93,7 +93,7 @@ class AuthController extends Controller
                 'type'     =>  'unverifiedEmail',
                 'message'  =>  'Your email has not been verified yet. You can request for another verification email.',
                 'url'      =>   url('/request-verification/'.$user->id)
-            ],401);
+            ],403);
         }
 
         $response = $this->generateToken($request->email, $request->device_id, $request->device_token);
