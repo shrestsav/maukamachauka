@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'fname','lname', 'email', 'username', 'password','phone','OTP','OTP_timestamp'
+        'fname','lname', 'email', 'username', 'password','phone','OTP','OTP_timestamp','f_id','g_id','avatar'
     ];
 
     protected $appends = ['full_name'];
@@ -57,6 +57,20 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->fname} {$this->lname}";
+    }
+
+    /**
+    * Validate the password of the user for the Passport password grant.
+    *
+    * @param  string $password
+    * @return bool
+    */
+    public function validateForPassportPasswordGrant($email)
+    {
+        if($this->email==$email)
+            return true;
+        else
+            return false;
     }
 
     public function sendOTP()

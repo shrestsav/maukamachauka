@@ -21,10 +21,15 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone')->unique()->nullable();
+
             $table->integer('OTP')->unsigned()->nullable();
             $table->datetime('OTP_timestamp')->nullable();
             $table->smallInteger('OTP_verified')->nullable()->default(0);
+            
             $table->string('password')->nullable();
+            $table->string('g_id')->nullable();
+            $table->string('f_id')->nullable();
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -21,6 +21,7 @@ Route::group(['prefix' => 'test'], function() {
 });
 
 Route::get('/', 'HomeController@index')->name('dashboard');
+Route::get('/firebase', 'TestController@firebaseIDToken');
 
 Auth::routes();
 
@@ -31,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
 	    Route::resource('roles','RoleController');
 	    Route::resource('users','UserController');
 	});
-
+	Route::apiResource('/categories','CategoryController');
 	Route::get('/notifications','UserController@notifications');
 	Route::get('/markAsRead/{notificationId}','UserController@markAsRead');
 	Route::get('/markAllAsRead','UserController@markAllAsRead');

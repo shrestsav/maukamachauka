@@ -9,6 +9,9 @@ import appDefaults from '../components/appDefaults/index.vue'
 import customers from '../components/customers/index.vue'
 import unverifiedCustomers from '../components/customers/unverifiedCustomers.vue'
 
+import categories from '../components/categories/index.vue'
+import createCategory from '../components/categories/create.vue'
+
 import pushNotification from '../components/pushNotification/index.vue'
 
 const routes = [
@@ -18,6 +21,9 @@ const routes = [
 
   {name:'customers',  path: '/v/customers', component: customers },
   {name:'unverifiedCustomers',  path: '/v/unverifiedCustomers', component: unverifiedCustomers },
+
+  {name:'categories',  path: '/v/categories', component: categories },
+  {name:'createCategory',  path: '/v/categories/create', component: createCategory },
 
   {name:'pushNotification',  path: '/v/push-notification', component: pushNotification },
 ]

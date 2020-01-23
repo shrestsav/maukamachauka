@@ -16,6 +16,8 @@ Route::post('/register_user','Api\AuthController@register');
 Route::post('/login','Api\AuthController@login');
 Route::post('/verifyOTP','Api\AuthController@verifyOTP');
 
+Route::post('/socialLogin','Api\AuthController@socialLogin');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

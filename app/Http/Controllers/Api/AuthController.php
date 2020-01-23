@@ -58,7 +58,7 @@ class AuthController extends Controller
 
         // $user->sendEmailVerificationNotification();
 
-        $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+        $response = $this->generateToken($request->email, $request->device_id, $request->device_token);
         
         return response()->json([
             'message'   =>  'Verification Email has been sent'
@@ -90,12 +90,12 @@ class AuthController extends Controller
             ],401);
         }
         
-        $response = $this->generateToken($request->email, $request->password, $request->device_id, $request->device_token);
+        $response = $this->generateToken($request->email, $request->device_id, $request->device_token);
 
         return response()->json($response);
     }
 
-    public function generateToken($email, $password, $device_id, $device_token)
+    public function generateToken($email, $device_id, $device_token)
     {
         $url = url('').'/oauth/token';
         $user = User::where('email',$email)->firstOrFail();
@@ -107,7 +107,7 @@ class AuthController extends Controller
                             'client_id'     => 2,
                             'client_secret' => 'iMW9m2tB1h2RMANtE0DPCcNrZs6nG8yRFaBwK3y5',
                             'username'      => $email,
-                            'password'      => $password,
+                            'password'      => $email,
                             'scope'         => '',
                         ],
                         'http_errors' => false // add this to return errors in json
@@ -145,6 +145,145 @@ class AuthController extends Controller
         ];
 
         return $result;
+    }
+
+    public function socialLogin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'client'       => 'required|string|max:50',
+            'token'        => 'required|string|max:2000',
+            'device_id'    => 'required',
+            'device_token' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => '422',
+                'message' => 'Validation Failed',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $userSocialProfile = false;
+        $client = $request->client;
+        $token = $request->token;
+
+        if($client=='google'){
+            $social_id = 'g_id';
+            $profile = $this->googleLoginInfo($token);
+        }
+
+        if($client=='facebook'){
+            $social_id = 'f_id';
+            $profile = $this->facebookLoginInfo($token);
+        }
+
+        if($profile){
+            $user = User::where('email', $profile['email'])->orWhere($social_id, $profile['id']);
+            if($user->exists()){
+                $user = $user->first();
+                $user->update([
+                    $social_id => $profile['id'],
+                    'avatar'   => $profile['avatar']
+                ]);
+            }
+            else{
+                $user = User::create([
+                    'email'     =>  $profile['email'],
+                    $social_id  =>  $profile['id'],
+                    'fname'     =>  $profile['fname'],
+                    'lname'     =>  $profile['lname'],
+                ]);
+            }
+            $response = $this->generateToken($user->email, $request->device_id, $request->device_token);
+        }
+        else{
+            return response()->json([
+                'status'  => '400',
+                'message' => 'Problem with Token',
+            ], 400);
+        }
+        
+
+        return $response;
+        // $existingUser = User::where('email', $user->getEmail())->orWhere($social_id, $user->id)->first();
+    }
+
+    public function googleLoginInfo($token)
+    {
+        $curlUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token='.$token;
+
+        $userSocialProfile = $this->curlRequest($curlUrl);
+
+        if(!$userSocialProfile){
+            return false;
+        }
+
+        else{
+            $user = [
+                'id'      =>  $userSocialProfile['sub'],
+                'fname'   =>  $userSocialProfile['given_name'],
+                'lname'   =>  $userSocialProfile['family_name'],
+                'avatar'  =>  $userSocialProfile['picture'],
+                'email'   =>  $userSocialProfile['email']
+            ];
+            
+            return $user;
+        }
+    }
+
+    public function facebookLoginInfo($token)
+    {
+        $curlUrl = 'https://graph.facebook.com/me?fields=email,name,first_name,last_name,picture&access_token='.$token;
+
+        $userSocialProfile = $this->curlRequest($curlUrl);
+
+        if(!$userSocialProfile){
+            return false;
+        }
+
+        else{
+            $user = [
+                'id'      =>  $userSocialProfile['id'],
+                'fname'   =>  $userSocialProfile['first_name'],
+                'lname'   =>  $userSocialProfile['last_name'],
+                'avatar'  =>  $userSocialProfile['picture']['data']['url'],
+                'email'   =>  $userSocialProfile['email']
+            ];
+            
+            return $user;
+        }
+    }
+
+    public function curlRequest($curlUrl){
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $curlUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_FAILONERROR, false);
+        curl_setopt($ch, CURLOPT_HTTP200ALIASES, (array)400);
+
+        $headers = array();
+        $headers[] = "Accept: application/json";
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        
+        if (!curl_errno($ch)) {
+            switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+                case 200:  # OK
+                    break;
+                default:
+                    return false;
+            }
+        }
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close ($ch);
+
+        return json_decode($result, true);
     }
     public function createProfile(Request $request)
     {
