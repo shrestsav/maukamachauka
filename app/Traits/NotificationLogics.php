@@ -19,7 +19,7 @@ trait NotificationLogics
             'emailType'  => 'new_registration',
             'name'       => $user->full_name,
             'email'      => $user->email,
-            'subject'    => "GO-RINSE: Welcome ".$user->full_name,
+            'subject'    => "Welcome ".$user->full_name,
             'message'    => "Welcome to Maukamachauka. Please use the link below to verify your email.",
             'verifyLink' => $verifyLink,
         ];
