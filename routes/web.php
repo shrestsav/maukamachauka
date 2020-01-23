@@ -23,6 +23,9 @@ Route::group(['prefix' => 'test'], function() {
 Route::get('/', 'HomeController@index')->name('dashboard');
 Route::get('/firebase', 'TestController@firebaseIDToken');
 
+Route::get('/verify-email/{encryptedEmail}','UserController@verifyEmail'); //Verify Email for Mobile App Signups
+Route::get('/request-verification/{userID}','UserController@resendVerifyEmail');
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {

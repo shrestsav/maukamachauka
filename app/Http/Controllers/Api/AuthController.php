@@ -52,11 +52,7 @@ class AuthController extends Controller
         //Assign User as user
         $user->attachRole($role_id);
 
-        // if ($request->user()->hasVerifiedEmail()) {
-        //     return redirect($this->redirectPath());
-        // }
-
-        // $user->sendEmailVerificationNotification();
+        User::notifyNewRegistration($user);
 
         $response = $this->generateToken($request->email, $request->device_id, $request->device_token);
         
@@ -83,6 +79,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email',$request->email)->first();
+
         if(!Hash::check($request['password'], $user->getAuthPassword())){
             return response()->json([
                 'status'   =>  '401',
@@ -90,6 +87,14 @@ class AuthController extends Controller
             ],401);
         }
         
+        if(is_null($user->email_verified_at)){
+            return response()->json([
+                'status'   =>  '403',
+                'message'  =>  'Your email has not been verified yet. You can request for another verification email.',
+                'url'      =>   url('/request-verification/'.$user->id)
+            ],401);
+        }
+
         $response = $this->generateToken($request->email, $request->device_id, $request->device_token);
 
         return response()->json($response);

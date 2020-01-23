@@ -159,4 +159,37 @@ class UserController extends Controller
         return response()->json(['message'=>'All Notifications Marked as read']);
     }
 
+    public function verifyEmail($encryptedEmail)
+    {
+        $email = decrypt($encryptedEmail);
+
+        $user = User::where('email',$email);
+        
+        if(!$user->exists()){
+            return 'Sorry no user found';
+        }
+
+        $user = $user->first();
+
+        if(is_null($user->email_verified_at)){
+            $user->email_verified_at =  \Carbon\Carbon::now()->toDateTimeString();
+            $user->save();
+            return 'Dear user, your Email '.$user->email.' has been successfully verified for use with Maukamachauka Mobile App.'; 
+        }
+        else{
+            return 'Dear user, your Email '.$user->email.' has already been verified before. You can already enjoy our App from the store.'; 
+        }
+    }
+
+    public function resendVerifyEmail($userID)
+    {
+        $user = User::findOrFail($userID);
+
+        User::notifyNewRegistration($user);
+
+        return response()->json([
+            'message'   =>  'Verification Email has been sent'
+        ]);
+    }
+
 }

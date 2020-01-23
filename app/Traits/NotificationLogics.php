@@ -12,16 +12,16 @@ trait NotificationLogics
     /**
     * Send Welcome Email
     */
-    public static function notifyNewRegistration($user_id)
-    {  
-        $user = User::find($user_id);
-        
+    public static function notifyNewRegistration($user)
+    {   
+        $verifyLink = url('verify-email/'.encrypt($user->email));
         $mailData = [
-            'emailType' => 'new_registration',
-            'name'      => $user->full_name,
-            'email'     => $user->email,
-            'subject'   => "GO-RINSE: Welcome ".$user->full_name,
-            'message'   => "Welcome to GO-RINSE..",
+            'emailType'  => 'new_registration',
+            'name'       => $user->full_name,
+            'email'      => $user->email,
+            'subject'    => "GO-RINSE: Welcome ".$user->full_name,
+            'message'    => "Welcome to Maukamachauka. Please use the link below to verify your email.",
+            'verifyLink' => $verifyLink,
         ];
         
         // Notify user in email
