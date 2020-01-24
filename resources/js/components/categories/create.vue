@@ -7,13 +7,13 @@
           <div :class="'col-lg-'+item['col']" v-for="item,key in section">
             <div class="form-group">
               <label class="form-control-label" :for="'input-'+key">{{item['display_name']}}</label>
-              <template v-if="item['type']==='file' && key==='icon'" >
+              <template v-if="item['type']==='file' && key==='image'" >
                 <div class="card-profile-image">
                   <a href="#">
-                    <img :src="category.icon_src" class="rounded-circle" @click="triggerIconInput" :class="{'img-not-validated':errors.icon_file}" >
-                    <input type="file" class="custom-file-input" lang="en" v-on:change="imageChange" style="display: none;" ref="icon_file">
-                    <div class="invalid-feedback" style="display: block;" v-if="errors.icon_file">
-                      {{errors.icon_file[0]}}
+                    <img :src="category.image_src" class="" @click="triggerImageInput" :class="{'img-not-validated':errors.image_file}" >
+                    <input type="file" class="custom-file-input" lang="en" v-on:change="imageChange" style="display: none;" ref="image_file">
+                    <div class="invalid-feedback" style="display: block;" v-if="errors.image_file">
+                      {{errors.image_file[0]}}
                     </div>
                   </a>
                 </div>            
@@ -56,8 +56,8 @@
     data(){
       return{
         category:{
-          icon_file:'',
-          icon_src:window.location.origin+'/files/categories/no_image.png',
+          image_file:'',
+          image_src:window.location.origin+'/files/categories/no_image.png',
         },
         errors:{},
       }
@@ -91,13 +91,13 @@
           }  
         })
       },
-      triggerIconInput() {
-        console.log(this.$refs.icon_file)
-          this.$refs.icon_file[0].click()
+      triggerImageInput() {
+        console.log(this.$refs.image_file)
+          this.$refs.image_file[0].click()
       },
       imageChange(e) {
-        this.category.icon_file = e.target.files[0]
-        this.category.icon_src = URL.createObjectURL(this.category.icon_file)
+        this.category.image_file = e.target.files[0]
+        this.category.image_src = URL.createObjectURL(this.category.image_file)
       }
     },
     computed: {

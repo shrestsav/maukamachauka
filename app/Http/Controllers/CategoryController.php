@@ -30,7 +30,7 @@ class CategoryController extends Controller
         $validatedData = $request->validate([
             'name'        => 'required|max:20|unique:categories',
             'description' => 'required|max:100',
-            'image_file'   => 'required|mimetypes:image/svg',
+            'image_file'   => 'required|mimes:jpeg,bmp,png|max:15360',
         ]);
 
         if($request->hasFile('image_file')) {
@@ -71,7 +71,7 @@ class CategoryController extends Controller
         $validatedData = $request->validate([
             'id'          => 'required|numeric',
             'description' => 'required|max:100',
-            'image_file'   => 'mimetypes:image/svg',
+            'image_file'   => 'required|mimes:jpeg,bmp,png|max:15360',
         ]);
 
         $category = Category::findOrFail($request->id);

@@ -62,10 +62,10 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            $rows = AppDefault::firstOrFail()->sys_rows;
-            session([
-                'rows' => $rows, 
-            ]);
+            // $rows = AppDefault::firstOrFail()->sys_rows;
+            // session([
+            //     'rows' => $rows, 
+            // ]);
             return $this->sendLoginResponse($request);
         }
 

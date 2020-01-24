@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 	    Route::resource('users','UserController');
 	});
 	Route::apiResource('/categories','CategoryController');
+	Route::apiResource('/brands','BrandController');
 	Route::get('/notifications','UserController@notifications');
 	Route::get('/markAsRead/{notificationId}','UserController@markAsRead');
 	Route::get('/markAllAsRead','UserController@markAllAsRead');

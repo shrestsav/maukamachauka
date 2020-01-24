@@ -42,7 +42,15 @@
           <router-link :to="{ name: 'categories'}" >
             <a class="nav-link" href="{{url('/v/categories')}}" :href="''" v-bind:class="{active: currentMenu=='categories'}">
               <i class="ni ni-circle-08 text-info"></i>
-              <span class="nav-link-text">Categories</span>
+              <span class="nav-link-text">Tags / Categories</span>
+            </a>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'brands'}" >
+            <a class="nav-link" href="{{url('/v/brands')}}" :href="''" v-bind:class="{active: currentMenu=='brands'}">
+              <i class="ni ni-circle-08 text-info"></i>
+              <span class="nav-link-text">Brands</span>
             </a>
           </router-link>
         </li>

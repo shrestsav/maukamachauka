@@ -35,6 +35,6 @@ class Category extends Model
     {
   		// $src = $this->image ? asset('files/categories/'.$this->image) : asset('files/categories/no_image.png');
   		
-        return "https://loremflickr.com/320/240";
+        return "https://loremflickr.com/320/240?".Str::random(5);
     }
 }

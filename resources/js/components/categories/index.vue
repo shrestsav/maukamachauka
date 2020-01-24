@@ -20,7 +20,7 @@
               <tr>
                 <th>S.No.</th>
                 <th>Category Name</th>
-                <th>Category Icon</th>
+                <th>Category Image</th>
                 <th>Description</th>
                 <th>Action</th>
               </tr>
@@ -31,13 +31,13 @@
                 <td>{{item.name}}</td>
                 <td>
                   <template v-if="editExistingCategory(item.id)">
-                    <img :src="category.icon_src" class="rounded-circle" @click="triggerIconInput(index)" :class="{'img-not-validated':errors.icon_file}" >
-                    <input type="file" class="custom-file-input" lang="en" v-on:change="imageChange" style="display: none;" :ref="'icon_file_'+index">
-                    <div class="invalid-feedback" style="display: block;" v-if="errors.icon_file">
-                      {{errors.icon_file[0]}}
+                    <img :src="category.image_src" class="rounded-circle" @click="triggerImageInput(index)" :class="{'img-not-validated':errors.image_file}" >
+                    <input type="file" class="custom-file-input" lang="en" v-on:change="imageChange" style="display: none;" :ref="'image_file_'+index">
+                    <div class="invalid-feedback" style="display: block;" v-if="errors.image_file">
+                      {{errors.image_file[0]}}
                     </div>
                   </template>
-                  <img v-else :src="item.icon_src">
+                  <img v-else :src="item.image_src" height="100px">
                 </td>
                 <td>
                   <div class="form-group" v-if="editExistingCategory(item.id)">
@@ -155,12 +155,12 @@
           }  
         })
       },
-      triggerIconInput(key) {
-        this.$refs['icon_file_'+key][0].click()
+      triggerImageInput(key) {
+        this.$refs['image_file_'+key][0].click()
       },
       imageChange(e) {
-        this.category.icon_file = e.target.files[0]
-        this.category.icon_src = URL.createObjectURL(this.category.icon_file)
+        this.category.image_file = e.target.files[0]
+        this.category.image_src = URL.createObjectURL(this.category.image_file)
       }
     },
     computed: {
