@@ -22,7 +22,7 @@ class FakeDataSeeder extends Seeder
         $totalOffer = 200;
 
         for ($i = 1; $i <= $totalCat; $i++) {
-            Category::create([ 
+            $cat = Category::create([ 
                 'name' 		  => $faker->name,
                 'description' => $faker->text,
                 'image' 	  => 'empty',
@@ -31,24 +31,30 @@ class FakeDataSeeder extends Seeder
         }
 
         for ($i = 1; $i <= $totalBrand; $i++) {
-            Brand::create([ 
-                'category_id' => rand(1,$totalCat),
+            $brand = Brand::create([ 
                 'name' 		  => $faker->name,
                 'description' => $faker->text,
                 'logo' 		  => 'empty',
                 'status' 	  => 1,
             ]);
+            // $randCatIDs = [];
+            // $arrLength = rand(1,4);
+            // for($d = 0; $d<$arrLength; $d++){
+            //     array_push($randCatIDs, rand(1,$totalCat));
+            // }
+            $brand->categories()->attach(rand(1,$totalCat));
         }
 
         for ($i = 1; $i <= $totalOffer; $i++) {
-            Offer::create([ 
+            $offer = Offer::create([ 
                 'brand_id'    => rand(1,$totalBrand),
-                'category_id' => rand(1,$totalCat),
-                'title' 		  => $faker->name,
+                'title'       => $faker->name,
                 'description' => $faker->text,
                 'image' 	  => 'empty',
                 'status' 	  => 1,
             ]);
+            $offer->categories()->attach(rand(1,$totalCat));
         }
+
     }
 }

@@ -45,6 +45,7 @@ class CategoryController extends Controller
             'description'  =>  $request->description,
             'image'         =>  $fileName
         ]);
+        
         return response()->json('Successfully Added');
     }
 

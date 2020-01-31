@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Category;
 use App\Brand;
 use App\Offer;
+use Auth;
 
 class OfferController extends Controller
 {
@@ -20,14 +21,14 @@ class OfferController extends Controller
     {
         $offers = Offer::select('id',
                                 'brand_id',
-                                'category_id',
                                 'title',
                                 'description',
+                                'liked_by',
                                 'created_at')
-                        ->with('category:id,name','brand:id,name')
-                        ->paginate(10);
+                        ->with('categories:id,name','brand:id,name')
+                        ->paginate(config('settings.rows'));
 
-        $offers->setCollection( $offers->getCollection()->makeHidden(['brand_id','category_id']));
+        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status']));
 
         $categories = Category::select('id','name','image')->where('status',1)->get();
 
@@ -38,14 +39,16 @@ class OfferController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function brandDetails($brandID)
     {
-        //
+        $brand = Brand::findOrFail($brandID);
+        
+        return response()->json($brand);
     }
 
     /**
@@ -54,31 +57,64 @@ class OfferController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function brandOffers($brandID)
     {
-        //
+        $brand = Brand::findOrFail($brandID);
+
+        $offers = Offer::where('brand_id', $brandID)->paginate(config('settings.rows'));
+
+        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status']));
+        
+        return response()->json($offers);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function categoryOffers($catID)
     {
-        //
+        $offers = Category::findOrFail($catID)->offers()->paginate(config('settings.rows'));
+
+        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status']));
+
+        return response()->json($category);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function likeOffer($offerID)
+    {
+        $offers = Offer::findOrFail($offerID);
+
+        $liked_by = [];
+
+        if($offers->liked_by)
+           $liked_by = $offers->liked_by;
+        
+        if(!in_array(Auth::id(), $liked_by))
+            array_push($liked_by, Auth::id());
+
+        if(count($liked_by)){
+            $offers->update([
+                'liked_by'  =>  $liked_by
+            ]);
+
+            return response()->json([
+                'message'   =>  'Offer marked as like'
+            ]);
+        }
+        
+        return response()->json([
+            'message'   =>  "Nothing happened actually"
+        ]);  
+
+    }
+
 }

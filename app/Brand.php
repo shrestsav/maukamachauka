@@ -15,4 +15,9 @@ class Brand extends Model
   		
         return "https://loremflickr.com/320/240?".Str::random(5);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,'brand_category');
+    }
 }

@@ -22,9 +22,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 
-	Route::apiResource('/offers','OfferController');
+
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
+	Route::get('/offers','OfferController@index');
+	Route::get('/offer/like/{offerID}','OfferController@likeOffer');
+	Route::get('/brands/{brandID}','OfferController@brandDetails');
+	Route::get('/brand/offers/{brandID}','OfferController@brandOffers');
+	Route::get('/category/offers/{catID}','OfferController@categoryOffers');
+	
 
 	Route::get('/checkRole','AuthController@checkRole');
 

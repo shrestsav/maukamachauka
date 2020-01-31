@@ -3,55 +3,95 @@
         <div class="pl-lg-4">
             <br>
             <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label" for="input-name">Brand Name</label>
-                  <!-- <template v-if="item['type']==='file' && key==='logo'" >
-                    <div class="card-profile-image">
-                      <a href="#">
-                        <img :src="category.logo_src" class="" @click="triggerLogoInput" :class="{'img-not-validated':errors.logo_file}" >
-                        <input type="file" class="custom-file-input" lang="en" v-on:change="logoChange" style="display: none;" ref="logo_file">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-name">Brand Logo</label>
+                        <div class="card-profile-image">
+                            <a href="#">
+                                <img :src="brand.logo_src" class="" @click="triggerLogoInput" :class="{'img-not-validated':errors.logo_file}" >
+                                <input type="file" class="custom-file-input" lang="en" v-on:change="logoChange" style="display: none;" ref="logo_file">
+                                <div class="invalid-feedback" style="display: block;" v-if="errors.logo_file">
+                                  {{errors.logo_file[0]}}
+                                </div>
+                            </a>
+                        </div>            
                         <div class="invalid-feedback" style="display: block;" v-if="errors.logo_file">
-                          {{errors.logo_file[0]}}
+                            {{errors.logo_file[0]}}
                         </div>
-                      </a>
-                    </div>            
-                  </template> -->
-                  <input 
-                    :class="{'not-validated':errors.name}" 
-                    :type="item['type']" 
-                    :id="'input-'+key" 
-                    placeholder="Enter Brand Name" 
-                    v-model="brand.name"
-                    class="form-control" 
-                  >
-                  <div class="invalid-feedback" style="display: block;" v-if="errors.name">
-                    {{errors.name[0]}}
-                  </div>
-                  <textarea 
-                    rows="4" 
-                    :class="{'not-validated':errors[key]}" 
-                    class="form-control" 
-                    placeholder="Enter Description" 
-                    v-model="brand.description"
-                  ></textarea>
-                  
+                    </div>
                 </div>
-              </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-name">Brand Name</label>
+                        <input 
+                            :class="{'not-validated':errors.name}" 
+                            type="text" 
+                            :id="'input-'+key" 
+                            placeholder="Enter Brand Name" 
+                            v-model="brand.name"
+                            class="form-control">
+                        <div class="invalid-feedback" style="display: block;" v-if="errors.name">
+                            {{errors.name[0]}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-name">Categories / Tags</label>
+                        <v-select
+                            autocomplete="off"
+                            class="form-control form-control-sm padding-rn country_code"
+                            v-model="value"
+                            :options="options"
+                            :reduce="data => data.name"
+                            label="name"
+                            multiple 
+                        />
+                        <div class="invalid-feedback" style="display: block;" v-if="errors.category_ids">
+                            {{errors.category_ids[0]}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="input-name">Brand Name</label>
+                        <textarea 
+                            rows="4" 
+                            :class="{'not-validated':errors[key]}" 
+                            class="form-control" 
+                            placeholder="Enter Description" 
+                            v-model="brand.description">        
+                        </textarea>
+                        <div class="invalid-feedback" style="display: block;" v-if="errors.description">
+                            {{errors.description[0]}}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="text-center">
-          <button class="btn btn-outline-primary" @click="save">Create</button>
+            <button class="btn btn-outline-primary" @click="save">Create</button>
         </div>
     </div>
 </template>
 
 <script>
-  import {fields} from '../../config/fields'
+    import {fields} from '../../config/fields'
+    import vSelect from 'vue-select'
+    import 'vue-select/dist/vue-select.css'
 
   export default{
+    components:{vSelect},
     data(){
       return{
+        value: null,
+        options: [
+            { name: 'Vue.js', language: 'JavaScript' },
+            { name: 'Rails', language: 'Ruby' },
+            { name: 'Sinatra', language: 'Ruby' },
+            { name: 'Laravel', language: 'PHP', $isDisabled: true },
+            { name: 'Phoenix', language: 'Elixir' }
+        ],
         brand:{
           logo_file:'',
           logo_src:window.location.origin+'/files/brands/no_image.png',

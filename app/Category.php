@@ -38,4 +38,14 @@ class Category extends Model
   		
         return "https://loremflickr.com/320/240?".Str::random(5);
     }
+
+    public function brands()
+    {
+        return $this->belongsToMany(Brand::class,'brand_category');
+    }
+
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class,'offer_category');
+    }
 }
