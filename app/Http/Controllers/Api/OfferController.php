@@ -112,8 +112,38 @@ class OfferController extends Controller
         }
         
         return response()->json([
-            'message'   =>  "Nothing happened actually"
-        ]);  
+            'message'   =>  "Nothing actually happened"
+        ], 403);  
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function removeLikeOffer($offerID)
+    {
+        $offers = Offer::findOrFail($offerID);
+
+        $liked_by = $offers->liked_by;
+
+        if($liked_by && is_array($liked_by) && in_array(Auth::id(), $liked_by)){
+            $arrKey = array_search(Auth::id(), $liked_by);
+            array_splice($liked_by, $arrKey, 1);
+            $offers->update([
+                'liked_by'  =>  $liked_by
+            ]);
+
+            return response()->json([
+                'message'   =>  "Removed Like from offer"
+            ]);
+        }
+        
+        return response()->json([
+            'message'   =>  "Nothing actually happened"
+        ], 403);  
 
     }
 
