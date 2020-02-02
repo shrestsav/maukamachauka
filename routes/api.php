@@ -26,8 +26,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/offers','OfferController@index');
-	Route::get('/offer/like/{offerID}','OfferController@likeOffer');
-	Route::get('/offer/removeLike/{offerID}','OfferController@removeLikeOffer');
+
+	Route::get('/offer/like/add/{offerID}','OfferController@likeOffer');
+	Route::delete('/offer/like/remove/{offerID}','OfferController@removeLikeOffer');
+
+	Route::get('/offer/favorite/add/{offerID}','OfferController@addToFavorites');
+	Route::delete('/offer/favorite/remove/{offerID}','OfferController@removeFromFavorites');
+
+	Route::get('/offer/favorites','OfferController@userFavoriteOffers');
+
 	Route::get('/brands/{brandID}','OfferController@brandDetails');
 	Route::get('/brand/offers/{brandID}','OfferController@brandOffers');
 	Route::get('/category/offers/{catID}','OfferController@categoryOffers');
@@ -47,5 +54,4 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/markAllAsRead','AuthController@markAllAsRead');
 
 	Route::post('/deviceToken/remove','AuthController@removeDeviceToken');
-
 });

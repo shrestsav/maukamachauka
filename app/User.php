@@ -111,4 +111,12 @@ class User extends Authenticatable
         $this->notify(new AppNotification($notification));
     }
 
+    /**
+     * Favorite Offers of all users
+     */
+    public function favoriteOffers()
+    {
+        return $this->belongsToMany(Offer::class,'user_favorite_offer');
+    } 
+
 }

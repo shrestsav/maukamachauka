@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOfferCategoryTable extends Migration
+class CreateUserFavoriteOfferTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateOfferCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('offer_category', function (Blueprint $table) {
+        Schema::create('user_favorite_offer', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned();
             $table->integer('offer_id')->unsigned();
-            $table->integer('category_id')->unsigned();
             $table->timestamps();
             
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('offer_id')->references('id')->on('offers')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('categories')
-                ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->primary(['offer_id', 'category_id']);
+            $table->primary(['user_id', 'offer_id']);
         });
     }
 
@@ -34,6 +34,6 @@ class CreateOfferCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offer_category');
+        Schema::dropIfExists('user_favorite_offer');
     }
 }
