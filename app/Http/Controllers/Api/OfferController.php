@@ -13,10 +13,9 @@ use Auth;
 class OfferController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display Listing of offers
      *
-     * @return \Illuminate\Http\Response
-     */
+    **/
     public function index()
     {
         $offers = Offer::select('id',
@@ -43,11 +42,9 @@ class OfferController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display Brand Details
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    **/
     public function brandDetails($brandID)
     {
         $brand = Brand::findOrFail($brandID);
@@ -56,11 +53,9 @@ class OfferController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show all offers of brand
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    **/
     public function brandOffers($brandID)
     {
         $brand = Brand::findOrFail($brandID);
@@ -73,11 +68,9 @@ class OfferController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show all offers of category
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    **/
     public function categoryOffers($catID)
     {
         $offers = Category::findOrFail($catID)->offers()->paginate(config('settings.rows'));
@@ -88,11 +81,9 @@ class OfferController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Add Like to Offer
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    **/
     public function likeOffer($offerID)
     {
         $offer = Offer::findOrFail($offerID);
@@ -122,11 +113,9 @@ class OfferController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Remove Like From Offer
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    **/
     public function removeLikeOffer($offerID)
     {
         $offer = Offer::findOrFail($offerID);
