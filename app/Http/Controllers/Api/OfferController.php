@@ -24,7 +24,11 @@ class OfferController extends Controller
                                 'title',
                                 'description',
                                 'liked_by',
+                                'expires_in',
+                                'location',
+                                'liked_by',
                                 'created_at')
+                        ->where('expires_in','>=',Date('Y-m-d H:i:s'))
                         ->with('categories:id,name','brand:id,name')
                         ->paginate(config('settings.rows'));
 

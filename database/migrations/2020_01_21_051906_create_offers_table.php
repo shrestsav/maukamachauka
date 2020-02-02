@@ -21,6 +21,8 @@ class CreateOffersTable extends Migration
             $table->string('image');
             $table->smallInteger('status')->default(1)->comment('0: Inactive, 1: Active');
             $table->longText('liked_by')->nullable();
+            $table->dateTime('expires_in')->nullable();
+            $table->longText('location')->nullable();
             $table->timestamps();
         });
     }

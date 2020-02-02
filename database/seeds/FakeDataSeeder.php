@@ -15,6 +15,12 @@ class FakeDataSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('brands')->truncate();
+        DB::table('brand_category')->truncate();
+        DB::table('categories')->truncate();
+        DB::table('offers')->truncate();
+        DB::table('offer_category')->truncate();
+        
         $faker = Faker\Factory::create();
 
         $totalCat = 10;
@@ -45,13 +51,23 @@ class FakeDataSeeder extends Seeder
             $brand->categories()->attach(rand(1,$totalCat));
         }
 
+        $now = \Carbon\Carbon::now();
+
         for ($i = 1; $i <= $totalOffer; $i++) {
             $offer = Offer::create([ 
                 'brand_id'    => rand(1,$totalBrand),
                 'title'       => $faker->name,
                 'description' => $faker->text,
                 'image' 	  => 'empty',
-                'status' 	  => 1,
+                'status'      => 1,
+                'expires_in'  => $now->addDays(rand(1,15)),
+                'location' 	  => [
+                    [
+                        'name'  =>  'Kalimati',
+                        'lat'   =>  '27.699051',
+                        'long'  =>  '85.2876866'
+                    ]
+                ]
             ]);
             $offer->categories()->attach(rand(1,$totalCat));
         }

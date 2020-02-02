@@ -15,7 +15,9 @@ class Offer extends Model
     protected $hidden = ['liked_status'];
 
     protected $casts = [
-        'liked_by'  => 'array'
+        'liked_by'  => 'array',
+        'location'  => 'array',
+        'expires_in'=> 'datatime'
     ];
 
     public function getLikedStatusAttribute($value)

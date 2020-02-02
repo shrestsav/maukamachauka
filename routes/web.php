@@ -17,7 +17,17 @@ use App\ReferralGrant;
 */
 
 Route::group(['prefix' => 'test'], function() {
-	
+	Route::get('/', function(){
+		// $OTP_timestamp = \Carbon\Carbon::parse($this->OTP_timestamp);
+        $current = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        // $totalTime = \Carbon\Carbon::now()->diffInMinutes($OTP_timestamp);
+        return $current;
+        // if($this->OTP==$OTP && $totalTime<=config('settings.OTP_expiry'))
+        //     return true;
+
+        // return false;
+		return Date('Y-m-d H:i:s');
+	});
 });
 
 Route::get('/', 'HomeController@index')->name('dashboard');
