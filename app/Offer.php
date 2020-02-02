@@ -10,11 +10,13 @@ class Offer extends Model
 {
 	protected $fillable = ['category_id','brand_id','title','description','image','status','liked_by'];
 
-    protected $appends = ['image_src','liked_status','favorite_status'];
+    protected $appends = ['image_src','likes_count','liked_status','favorite_status'];
 
-    protected $hidden = ['liked_status','favorite_status'];
+    protected $hidden = ['likes_count','liked_status','favorite_status','pivot','status','liked_by','image','userFavorites'];
 
     protected $casts = [
+        'brand_id'  => 'int',
+        'status'    => 'int',
         'liked_by'  => 'array',
         'location'  => 'array',
         'expires_in'=> 'datatime'
@@ -23,6 +25,17 @@ class Offer extends Model
     public function getLikedStatusAttribute($value)
     {
         return is_array($this->liked_by) && in_array(Auth::id(), $this->liked_by);
+    }
+
+    public function getLikesCountAttribute($value)
+    {
+        $count = 0;
+
+        if(is_array($this->liked_by)){
+            $count = count($this->liked_by);
+        }
+
+        return $count;
     }
 
     public function getFavoriteStatusAttribute($value)

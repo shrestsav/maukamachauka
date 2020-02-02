@@ -32,7 +32,7 @@ class OfferController extends Controller
                         ->with('categories:id,name','brand:id,name')
                         ->paginate(config('settings.rows'));
 
-        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status'])->makeHidden('userFavorites'));
+        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
 
         $categories = Category::select('id','name','image')->where('status',1)->get();
 
@@ -67,7 +67,7 @@ class OfferController extends Controller
 
         $offers = Offer::where('brand_id', $brandID)->paginate(config('settings.rows'));
 
-        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status']));
+        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
         
         return response()->json($offers);
     }
@@ -82,7 +82,7 @@ class OfferController extends Controller
     {
         $offers = Category::findOrFail($catID)->offers()->paginate(config('settings.rows'));
 
-        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status']));
+        $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
 
         return response()->json($category);
     }
@@ -111,7 +111,6 @@ class OfferController extends Controller
 
             return response()->json([
                 'response_type' =>  'like_offer',
-                'liked_status'  =>  true,
                 'message'       =>  'Offer marked as like'
             ]);
         }
@@ -143,7 +142,6 @@ class OfferController extends Controller
 
             return response()->json([
                 'response_type'   =>  'like_offer',
-                'unliked_status'  =>  true,
                 'message'         =>  "Removed Like from offer"
             ]);
         }
