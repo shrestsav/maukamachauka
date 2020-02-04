@@ -291,55 +291,6 @@ class AuthController extends Controller
 
         return json_decode($result, true);
     }
-    public function createProfile(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'fname' => 'required',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => '422',
-                'message' => 'Validation Failed',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $userInput = $request->only('fname', 'lname', 'email');
-
-        if($request->referred_by){
-            $check = UserDetail::where('referral_id',$request->referred_by);
-            if(!$check->exists()){
-                return response()->json([
-                    'status' => '404',
-                    'message'=> 'Referral ID is Invalid' 
-                ],404);
-            }
-        }
-
-        $address = User::where('id',Auth::id())->update($userInput);
-        
-        if($request->email){
-            User::notifyNewRegistration(Auth::id());
-        }
-        //Generate random Referral ID for registered user
-        $random_string = substr($request->fname, 0, 3).rand(100,999).Str::random(10);
-        $referral_id = strtoupper(substr($random_string, 0, 8));
-        
-        //Save User Photo 
-        $userDetail = UserDetail::updateOrCreate(
-                ['user_id' => Auth::id()],
-                [
-                    'referred_by' => $request->referred_by,
-                    'referral_id' => $referral_id
-                ]);
-
-        return response()->json([
-                'status' => '200',
-                'message'=> 'Profile Created Successfully' 
-            ],200);
-    }
 
     public function checkRole()
     {

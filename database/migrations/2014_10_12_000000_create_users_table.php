@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('g_id')->nullable();
             $table->string('f_id')->nullable();
             $table->text('avatar')->nullable();
+            $table->string('photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

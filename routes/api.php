@@ -43,7 +43,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/checkRole','AuthController@checkRole');
 
 	Route::group(['middleware' => ['role:user']], function() {
-		Route::post('/createProfile','AuthController@createProfile');
+		Route::post('/profile/update','UserController@updateProfile');
 	});
 
 	Route::get('/tokens','AuthController@tokens');

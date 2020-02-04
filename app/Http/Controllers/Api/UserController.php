@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use Auth;
+use App\User;
 
 class UserController extends Controller
 {
-
     public function updateProfile(Request $request)
     {
         if ($request->fname || $request->lname || $request->phone) {
@@ -16,7 +19,8 @@ class UserController extends Controller
                 "fname.required" => "First Name Cannot be empty"
             ];
             $validator = Validator::make($request->all(), [
-                "fname" => ['required', 'string', 'max:255'],
+            	'fname' =>  'required|string|max:255',
+            	'phone' =>  'required|unique:users,phone,'.Auth::id()
             ],$msgs);
 
             if ($validator->fails()) {
@@ -26,13 +30,13 @@ class UserController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
-            $input = $request->only('fname', 'lname');
-            $address = User::where('id',Auth::id())->update($input);
+            $input = $request->only('fname', 'lname', 'phone');
+            $update = User::where('id',Auth::id())->update($input);
 
             return response()->json([
                 'status' => '200',
                 'message'=> 'Profile Updated Successfully' 
-            ],200);
+            ], 200);
         }
 
         //Save User Photo 
@@ -67,10 +71,9 @@ class UserController extends Controller
             $image->save($uploadDirectory.DS.$fileName,60);
             // $photo->move($uploadDirectory, $fileName);
 
-            $userDetail = UserDetail::updateOrCreate(
-                ['user_id' => Auth::id()],
-                ['photo' => $fileName]
-            );
+            $update = User::where('id',Auth::id())->update([
+            	'photo'	=> $fileName
+            ]);
 
             return response()->json([
                 'status' => '200',
