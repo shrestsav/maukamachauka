@@ -77,7 +77,7 @@ class OfferController extends Controller
 
         $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
 
-        return response()->json($category);
+        return response()->json($offers);
     }
 
     /**
