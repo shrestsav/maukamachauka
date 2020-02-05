@@ -29,7 +29,7 @@ class User extends Authenticatable
         'fname','lname', 'email', 'username', 'password','phone','OTP','OTP_timestamp','f_id','g_id','avatar'
     ];
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name','user_avatar'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,7 +37,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','user_avatar','full_name'
     ];
 
     /**
@@ -57,6 +57,19 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->fname} {$this->lname}";
+    }
+
+    public function getUserAvatarAttribute()
+    {
+        $url = '';
+        if($this->photo!=''||$this->photo!=null)
+            $url = asset('files/users/'.Auth::id().'/'.$this->photo);
+        elseif($this->avatar)
+            $url = $this->avatar;
+        else
+            $url = asset('files/users/no_photo.png');
+        
+        return $url;
     }
 
     /**

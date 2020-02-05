@@ -64,8 +64,8 @@ class FakeDataSeeder extends Seeder
                 'location' 	  => [
                     [
                         'name'  =>  'Kalimati',
-                        'lat'   =>  '27.699051',
-                        'long'  =>  '85.2876866'
+                        'lat'   =>  (float)27.699051,
+                        'long'  =>  (float)85.2876866
                     ]
                 ]
             ]);
