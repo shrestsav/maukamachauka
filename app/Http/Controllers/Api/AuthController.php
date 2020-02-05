@@ -200,6 +200,11 @@ class AuthController extends Controller
                     'fname'     =>  $profile['fname'],
                     'lname'     =>  $profile['lname'],
                 ]);
+
+                $role_id = Role::where('name','user')->first()->id;
+
+                //Assign User as user
+                $user->attachRole($role_id);
             }
             $response = $this->generateToken($user->email, $request->device_id, $request->device_token);
         }

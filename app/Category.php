@@ -4,12 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Auth;
 
 class Category extends Model
 {
     protected $fillable = ['name','description','image','status'];
 
-    protected $appends = ['image_src'];
+    protected $appends = ['image_src','subscribed_status'];
+
+    protected $hidden = ['subscribed_status'];
 
     public function items()
     {
@@ -32,6 +35,11 @@ class Category extends Model
     //     return $status;
     // }    
 
+    public function getSubscribedStatusAttribute($value)
+    {
+        return $this->tagsUsers->contains(Auth::id());
+    }
+
     public function getImageSrcAttribute()
     {
   		// $src = $this->image ? asset('files/categories/'.$this->image) : asset('files/categories/no_image.png');
@@ -48,4 +56,12 @@ class Category extends Model
     {
         return $this->belongsToMany(Offer::class,'offer_category');
     }
+
+    /**
+     * tags users
+     */
+    public function tagsUsers()
+    {
+        return $this->belongsToMany(User::class,'user_tags_preference');
+    } 
 }

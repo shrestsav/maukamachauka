@@ -130,6 +130,14 @@ class User extends Authenticatable
     public function favoriteOffers()
     {
         return $this->belongsToMany(Offer::class,'user_favorite_offer');
+    }
+
+    /**
+     * Subscribed tags
+     */
+    public function tagsPreferences()
+    {
+        return $this->belongsToMany(Category::class,'user_tags_preference');
     } 
 
 }

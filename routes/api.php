@@ -38,12 +38,21 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/brands/{brandID}','OfferController@brandDetails');
 	Route::get('/brand/offers/{brandID}','OfferController@brandOffers');
 	Route::get('/category/offers/{catID}','OfferController@categoryOffers');
-	
+
+	Route::get('/categories','TagsController@index');
+
+	Route::get('/user/tag/subscribed','UserController@subscribedTags');
+
+	Route::get('/user/tag/subscribe/{catID}','UserController@subscribeTag');
+	Route::delete('/user/tag/unSubscribe/{catID}','UserController@unSubscribeTag');
 
 	Route::get('/checkRole','AuthController@checkRole');
 
 	Route::group(['middleware' => ['role:user']], function() {
-		Route::get('/profile','UserController@profile');
+		// Route::get('/profile','UserController@profile');
+		Route::get('/profile',function(){
+			return 'sdfdsf';
+		});
 		Route::post('/profile/update','UserController@updateProfile');
 	});
 
