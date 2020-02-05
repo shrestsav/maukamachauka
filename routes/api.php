@@ -49,10 +49,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/checkRole','AuthController@checkRole');
 
 	Route::group(['middleware' => ['role:user']], function() {
-		// Route::get('/profile','UserController@profile');
-		Route::get('/profile',function(){
-			return 'sdfdsf';
-		});
+		Route::get('/profile','UserController@profile');
 		Route::post('/profile/update','UserController@updateProfile');
 	});
 

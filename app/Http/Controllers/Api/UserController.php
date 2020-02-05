@@ -15,7 +15,6 @@ class UserController extends Controller
 {
     public function profile()
     {
-        return 'sfdsdf';
         $user = User::select('id','fname','lname','phone','email','photo','avatar')->find(Auth::id())->makeVisible(['full_name','user_avatar']); 
 
         return response()->json($user);
