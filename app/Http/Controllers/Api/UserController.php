@@ -22,6 +22,18 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            "photo" => 'nullable|mimes:jpeg,jpg,bmp,png|max:15072',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '422',
+                'message' => 'Validation Failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        
         if ($request->fname || $request->lname || $request->phone) {
             $msgs = [
                 "fname.required" => "First Name Cannot be empty"
@@ -49,18 +61,6 @@ class UserController extends Controller
 
         //Save User Photo 
         if ($request->hasFile('photo')) {
-            $validator = Validator::make($request->all(), [
-                "photo" => 'mimes:jpeg,jpg,bmp,png|max:15072',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => '422',
-                    'message' => 'Validation Failed',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
-
             $image = Image::make($request->file('photo'))->orientate();
 
             // prevent possible upsizing
