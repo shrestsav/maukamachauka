@@ -42,6 +42,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/categories','TagsController@index');
 
 	Route::get('/user/tag/subscribed','UserController@subscribedTags');
+	Route::get('/user/tag/notSubscribed','UserController@notSubscribedTags');
 
 	Route::get('/user/tag/subscribe/{catID}','UserController@subscribeTag');
 	Route::delete('/user/tag/unSubscribe/{catID}','UserController@unSubscribeTag');

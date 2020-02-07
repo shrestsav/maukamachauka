@@ -10,8 +10,8 @@ class TagsController extends Controller
 {
     public function index()
     {
-    	$categories = Category::get()->makeHidden('tags_users')->makeVisible('subscribed_status');
+    	$categories = Category::doesntHave('tagsUsers')->paginate(10);
 
-    	return $categories;
+    	return response()->json($categories);
     }
 }

@@ -102,9 +102,20 @@ class UserController extends Controller
     **/
     public function subscribedTags()
     {
-        $tags = Auth::user()->tagsPreferences()->get();
+        $tags = Auth::user()->tagsPreferences()->paginate(10);
         
         return response()->json($tags);  
+    }
+
+    /**
+     * Not Subscribed Tags
+     *
+    **/
+    public function notSubscribedTags()
+    {
+        $tags = Category::doesntHave('tagsUsers')->paginate(10);
+
+        return response()->json($tags);
     }
 
     /**
