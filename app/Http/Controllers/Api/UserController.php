@@ -114,6 +114,9 @@ class UserController extends Controller
     public function notSubscribedTags()
     {
         $tags = Category::doesntHave('tagsUsers')->paginate(10);
+        $tags = Category::whereDoesntHave('tagsUsers', function ($query) {
+                            $query->where('id', Auth::id());
+                        })->paginate(10);
 
         return response()->json($tags);
     }
