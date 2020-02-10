@@ -52,6 +52,11 @@ class Category extends Model
         return $this->belongsToMany(Brand::class,'brand_category');
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,'offer_category');
+    }
+
     public function offers()
     {
         return $this->belongsToMany(Offer::class,'offer_category');

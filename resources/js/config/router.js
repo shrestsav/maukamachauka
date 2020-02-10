@@ -15,6 +15,9 @@ import createCategory from '../components/categories/create.vue'
 import brands from '../components/brands/index.vue'
 import createBrand from '../components/brands/create.vue'
 
+import offers from '../components/offers/index.vue'
+import createOffer from '../components/offers/create.vue'
+
 import pushNotification from '../components/pushNotification/index.vue'
 
 const routes = [
@@ -30,6 +33,9 @@ const routes = [
   
   {name:'brands',  path: '/v/brands', component: brands },
   {name:'createBrand',  path: '/v/brands/create', component: createBrand },
+  
+  {name:'offers',  path: '/v/offers', component: offers },
+  {name:'createOffer',  path: '/v/offers/create', component: createOffer },
 
   {name:'pushNotification',  path: '/v/push-notification', component: pushNotification },
 ]

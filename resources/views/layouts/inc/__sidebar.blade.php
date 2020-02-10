@@ -55,6 +55,14 @@
           </router-link>
         </li>
         <li class="nav-item">
+          <router-link :to="{ name: 'offers'}" >
+            <a class="nav-link" href="{{url('/v/offers')}}" :href="''" v-bind:class="{active: currentMenu=='offers'}">
+              <i class="ni ni-circle-08 text-info"></i>
+              <span class="nav-link-text">Offers</span>
+            </a>
+          </router-link>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="#navbar-config" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-config" v-bind:class="{active: currentMenu=='settingsMenu'}">
             <i class="ni ni-settings text-info"></i>
             <span class="nav-link-text">App Settings</span>

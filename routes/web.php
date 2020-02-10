@@ -38,6 +38,10 @@ Route::get('/request-verification/{userID}','UserController@resendVerifyEmail');
 
 Auth::routes();
 
+// Temp Route
+Route::get('/authUser', function(){
+	return response()->json('Success');
+});
 Route::middleware(['auth'])->group(function () {
 
 	Route::get('/v/{any}', 'HomeController@index')->where('any', '.*');
@@ -47,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
 	});
 	Route::apiResource('/categories','CategoryController');
 	Route::apiResource('/brands','BrandController');
+	Route::apiResource('/offers','OfferController');
 	Route::get('/notifications','UserController@notifications');
 	Route::get('/markAsRead/{notificationId}','UserController@markAsRead');
 	Route::get('/markAllAsRead','UserController@markAllAsRead');
