@@ -3,110 +3,125 @@
         <div class="pl-lg-4">
             <br />
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label class="form-control-label" for="input-name">Featured Image</label>
-                        <div class="card-profile-image">
-                            <a href="#">
-                                <img
-                                    :src="offer.image_src"
-                                    class
-                                    @click="triggerImageInput"
-                                    :class="{
-                                        'img-not-validated': errors.image_file
-                                    }"
-                                />
+                <div class="col-md-3">
+                    <div class="form-group featured_image">
+                        <a href="#">
+                            <img
+                                id="featured_image"
+                                :src="offer.image_src"
+                                @click="triggerImageInput"
+                                :class="{
+                                    'img-not-validated': errors.image_file
+                                }"
+                            />
+                            <input
+                                type="file"
+                                class="custom-file-input"
+                                lang="en"
+                                v-on:change="imageChange"
+                                style="display: none;"
+                                ref="image_file"
+                            />
+                            <div
+                                class="invalid-feedback"
+                                style="display: block;"
+                                v-if="errors.image_file"
+                            >{{ errors.image_file[0] }}</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-title">Title</label>
                                 <input
-                                    type="file"
-                                    class="custom-file-input"
-                                    lang="en"
-                                    v-on:change="imageChange"
-                                    style="display: none;"
-                                    ref="image_file"
+                                    type="text"
+                                    id="input-title"
+                                    placeholder="Enter Offer Title"
+                                    v-model="offer.title"
+                                    class="form-control"
+                                    :class="{ 'not-validated': errors.title }"
                                 />
                                 <div
                                     class="invalid-feedback"
                                     style="display: block;"
-                                    v-if="errors.image_file"
-                                >{{ errors.image_file[0] }}</div>
-                            </a>
+                                    v-if="errors.title"
+                                >{{ errors.title[0] }}</div>
+                            </div>
                         </div>
-                        <div
-                            class="invalid-feedback"
-                            style="display: block;"
-                            v-if="errors.image_file"
-                        >{{ errors.image_file[0] }}</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label class="form-control-label" for="input-title">Title</label>
-                        <input
-                            type="text"
-                            id="input-title"
-                            placeholder="Enter Offer Title"
-                            v-model="offer.title"
-                            class="form-control"
-                            :class="{ 'not-validated': errors.title }"
-                        />
-                        <div
-                            class="invalid-feedback"
-                            style="display: block;"
-                            v-if="errors.title"
-                        >{{ errors.title[0] }}</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label class="form-control-label" for="input-expiry">Validity</label>
-                        <input
-                            type="date"
-                            id="input-expiry"
-                            placeholder="Valid Till"
-                            v-model="offer.expiry"
-                            class="form-control"
-                            :class="{ 'not-validated': errors.expiry }"
-                        />
-                        <div
-                            class="invalid-feedback"
-                            style="display: block;"
-                            v-if="errors.expiry"
-                        >{{ errors.expiry[0] }}</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label class="form-control-label" for="input-tag">Categories / Tags</label>
-                        <multiselect 
-                            v-model="value" 
-                            :options="categories"
-                            label="name"
-                            :multiple="true"
-                            placeholder="Add relevant Tags" 
-                            track-by="name"
-                        ></multiselect>
-                        <div
-                            class="invalid-feedback"
-                            style="display: block;"
-                            v-if="errors.category_ids"
-                        >{{ errors.category_ids[0] }}</div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label class="form-control-label" for="input-name">Description</label>
-                        <textarea
-                            rows="4"
-                            :class="{ 'not-validated': errors.description }"
-                            class="form-control"
-                            placeholder="Enter Description"
-                            v-model="offer.description"
-                        ></textarea>
-                        <div
-                            class="invalid-feedback"
-                            style="display: block;"
-                            v-if="errors.description"
-                        >{{ errors.description[0] }}</div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-expires_in">Validity</label>
+                                <input
+                                    type="date"
+                                    id="input-expires_in"
+                                    placeholder="Valid Till"
+                                    v-model="offer.expires_in"
+                                    class="form-control"
+                                    :class="{ 'not-validated': errors.expires_in }"
+                                />
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.expires_in"
+                                >{{ errors.expires_in[0] }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-tag">Categories / Tags</label>
+                                <multiselect 
+                                    v-model="offer.categories" 
+                                    :options="categories"
+                                    label="name"
+                                    :multiple="true"
+                                    placeholder="Add relevant Tags" 
+                                    track-by="name"
+                                ></multiselect>
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.categories"
+                                >{{ errors.categories[0] }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-tag">Source</label>
+                                <select v-model="offer.source" class="form-control">
+                                    <option selected value="" disabled>Select Source</option>
+                                    <option>Facebook</option>
+                                    <option>Instagram</option>
+                                    <option>Newspaper</option>
+                                    <option>Website</option>
+                                    <option>Direct</option>
+                                    <option>Others</option>
+                                </select>
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.source"
+                                >{{ errors.source[0] }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-name">Description</label>
+                                <textarea
+                                    rows="4"
+                                    :class="{ 'not-validated': errors.description }"
+                                    class="form-control"
+                                    placeholder="Enter Description"
+                                    v-model="offer.description"
+                                ></textarea>
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.description"
+                                >{{ errors.description[0] }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -134,10 +149,7 @@ export default {
                 { name: "Laravel", language: "PHP", $isDisabled: true },
                 { name: "Phoenix", language: "Elixir" }
             ],
-            offer: {
-                image_file: "",
-                image_src: window.location.origin + "/files/offers/no_image.png"
-            },
+            offer: {},
             errors: {}
         };
     },
@@ -147,11 +159,18 @@ export default {
     },
     mounted() {
         this.getCategories();
+        this.reset();
     },
     methods: {
         reset(){
             this.errors = {};
-            this.offer = {};
+            this.offer = {
+                title: "",
+                categories:[],
+                description: "",
+                image_file: "",
+                image_src: window.location.origin + "/files/offers/no_image.png"
+            };
         },
         getCategories(){
             axios.get("/categories").then(response => this.categories = response.data );
@@ -161,14 +180,14 @@ export default {
             for (var key in this.offer) {
                 formData.append(key, this.offer[key]);
             }
+            formData.append('categories', JSON.stringify(this.offer.categories));
             axios
                 .post("/offers", formData)
                 .then(response => {
-                    console.log(response.data)
-                    // this.reset();
-                    // this.$parent.addBtn = true;
-                    // this.$parent.getOffers();
-                    // showNotify("success", response.data);
+                    this.reset();
+                    this.$parent.addBtn = true;
+                    this.$parent.getOffers();
+                    showNotify("success", response.data);
                 })
                 .catch(error => {
                     this.errors = error.response.data.errors;
@@ -193,6 +212,13 @@ export default {
 };
 </script>
 <style>
+#featured_image{
+    width: 300px;
+    max-width: 400px; 
+}
+.featured_image{
+    text-align: center;
+}
 .mx-datepicker {
     width: unset;
     display: unset;

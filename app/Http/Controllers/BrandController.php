@@ -16,7 +16,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::all()->makeVisible('logo_src');
+        $brands = Brand::with('categories')->orderBy('created_at','DESC')->get()->makeVisible('logo_src');
         return response()->json($brands);
     }
 
@@ -28,25 +28,39 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
+        foreach($request->all() as $key => $req){
+            if($req=="null"){
+                $request[$key] = null;
+            }
+        }
+        $request['categories'] = json_decode($request['categories']);
         $validatedData = $request->validate([
-            'name'        => 'required|max:20|unique:categories',
-            'description' => 'required|max:100',
-            'logo_file'   => 'required|mimes:jpeg,bmp,png|max:15360',
+            'name'         => 'required|max:50',
+            'description'  => 'required|max:500',
+            'logo_file'    => 'required|mimes:jpeg,bmp,png|max:15360',
+            'categories'   => 'required|array',
         ]);
 
         if($request->hasFile('logo_file')) {
             $image = $request->file('logo_file');
-            $fileName = Str::random(15).'.'.$image->getClientOriginalExtension();
-            $uploadDirectory = public_path('files'.DS.'categories');
+            $fileName = Str::uuid().'.'.$image->getClientOriginalExtension();
+            $uploadDirectory = public_path('files'.DS.'brands');
             $image->move($uploadDirectory, $fileName);
         } 
 
-        $category = Category::create([
-            'name'         =>  $request->name,
-            'description'  =>  $request->description,
-            'image'         =>  $fileName
+        $brand = new Brand();
+        $brand->name = $request->name;
+        $brand->description = $request->description;
+        $brand->logo = $fileName;
+        $brand->save();
+
+        //Attaching categories to the brands
+        $cat_ids = collect($request['categories'])->pluck('id');
+        $brand->categories()->attach($cat_ids);
+
+        return response()->json([
+            'message'  =>  'brand saved successfully'
         ]);
-        return response()->json('Successfully Added');
     }
 
     /**

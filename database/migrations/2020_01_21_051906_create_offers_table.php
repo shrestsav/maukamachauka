@@ -23,6 +23,7 @@ class CreateOffersTable extends Migration
             $table->longText('liked_by')->nullable();
             $table->dateTime('expires_in')->nullable();
             $table->longText('location')->nullable();
+            $table->string('source')->nullable();
             $table->timestamps();
         });
     }

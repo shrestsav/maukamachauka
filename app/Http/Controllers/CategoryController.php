@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all()->makeVisible('image_src');
+        $categories = Category::orderBy('created_at','DESC')->get()->makeVisible('image_src');
         return response()->json($categories);
     }
 

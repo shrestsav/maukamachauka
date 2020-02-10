@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Brand;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -102,8 +103,8 @@ class UserController extends Controller
     **/
     public function subscribedTags()
     {
-        $tags = Auth::user()->tagsPreferences()->paginate(10);
-        
+        $tags = Auth::user()->tagsPreferences()->select('id','name')->paginate(10);
+        $tags->setCollection( $tags->getCollection()->makeHidden(['description','image','status','created_at','updated_at','image_src','pivot']));
         return response()->json($tags);  
     }
 
@@ -113,11 +114,10 @@ class UserController extends Controller
     **/
     public function notSubscribedTags()
     {
-        // $tags = Category::doesntHave('tagsUsers')->paginate(10);
         $tags = Category::whereDoesntHave('tagsUsers', function ($query) {
                             $query->where('id', Auth::id());
                         })->paginate(10);
-
+        $tags->setCollection( $tags->getCollection()->makeHidden(['description','image','status','created_at','updated_at','image_src','pivot']));
         return response()->json($tags);
     }
 
@@ -164,5 +164,60 @@ class UserController extends Controller
             'message'   =>  "You havenot subscribed this tag in the first place to unsubscribe"
         ], 403); 
 
+    }
+    /**
+     * Follow Brand
+     *
+    **/
+    public function followBrand($brandID)
+    {
+        $brand = Brand::findOrFail($brandID);
+
+        if($brand->followedBy->contains(Auth::id())){
+            return response()->json([
+                'message'   =>  "You've already followed this brand"
+            ], 403); 
+        }
+
+        $brand->followedBy()->attach(Auth::id());
+        
+        return response()->json([
+            'response_type' =>  'follow_brand',
+            'message'       =>  "Successfully Followed Brand"
+        ]);  
+    }
+
+    /**
+     * Unfollow Brand
+     *
+    **/
+    public function unfollowBrand($brandID)
+    {
+        $brand = Brand::findOrFail($brandID);
+
+        if($brand->followedBy->contains(Auth::id())){
+            $brand->followedBy()->detach(Auth::id());
+            return response()->json([
+                'response_type' =>  'follow_brand',
+                'message'       =>  "Successfully Unfollowed Brand"
+            ]); 
+        }
+
+        return response()->json([
+            'response_type' =>  'follow_brand',
+            'message'   =>  "You havenot followed this brand in the first place to unfollow"
+        ], 403); 
+
+    }
+
+    /**
+     * Followed Brands
+     *
+    **/
+    public function followedBrands()
+    {
+        $brands = Auth::user()->followedBrands()->paginate(10);
+        $brands->setCollection( $brands->getCollection()->makeHidden(['description','logo','status','created_at','updated_at','logo_src','pivot']));
+        return response()->json($brands);  
     }
 }

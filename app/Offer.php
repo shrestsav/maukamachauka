@@ -8,7 +8,7 @@ use Auth;
 
 class Offer extends Model
 {
-	protected $fillable = ['category_id','brand_id','title','description','image','status','liked_by'];
+	protected $fillable = ['category_id','brand_id','title','description','image','status','liked_by','source'];
 
     protected $appends = ['image_src','likes_count','liked_status','favorite_status'];
 
@@ -45,9 +45,14 @@ class Offer extends Model
 
     public function getImageSrcAttribute()
     {
-  		// $src = $this->image ? asset('files/categories/'.$this->image) : asset('files/categories/no_image.png');
-  		
-        return "https://loremflickr.com/320/240?".Str::random(5);
+        // $no_image = asset('files/categories/no_image.png');
+        $no_image = "https://loremflickr.com/320/240?".Str::random(5);
+  		$src = $this->image ? asset('files/offers/'.$this->image) : $no_image;
+  		if($this->image=="empty"){
+            $src = $no_image;
+        }
+
+        return $src;
     }
 
     public function categories()

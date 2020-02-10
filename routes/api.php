@@ -47,6 +47,12 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/user/tag/subscribe/{catID}','UserController@subscribeTag');
 	Route::delete('/user/tag/unSubscribe/{catID}','UserController@unSubscribeTag');
 
+	Route::get('/user/brand/followed','UserController@followedBrands');
+	Route::get('/user/brand/follow/{brandID}','UserController@followBrand');
+	Route::delete('/user/brand/unFollow/{brandID}','UserController@unfollowBrand');
+	
+	
+	
 	Route::get('/checkRole','AuthController@checkRole');
 
 	Route::group(['middleware' => ['role:user']], function() {

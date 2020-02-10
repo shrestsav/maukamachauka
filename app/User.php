@@ -138,6 +138,13 @@ class User extends Authenticatable
     public function tagsPreferences()
     {
         return $this->belongsToMany(Category::class,'user_tags_preference');
-    } 
+    }
 
+    /**
+     * Followed Brands
+     */
+    public function followedBrands()
+    {
+        return $this->belongsToMany(Brand::class,'user_brand_preference');
+    }
 }

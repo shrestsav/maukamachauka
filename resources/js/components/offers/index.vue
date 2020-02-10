@@ -36,6 +36,10 @@
                                 <th>Title</th>
                                 <th>offer Image</th>
                                 <th>Description</th>
+                                <th>Expires In</th>
+                                <th>Related Tags</th>
+                                <th>Location</th>
+                                <th>Source</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -46,7 +50,11 @@
                                 <td>
                                     <img :src="item.image_src" height="100px" />
                                 </td>
-                                <td>{{ item.description }}</td>
+                                <td><p class="desc">{{ item.description }}</p></td>
+                                <td>{{ dateDiff(item.expires_in) }}</td>
+                                <td>{{ grabName(item.categories) }}</td>
+                                <td>{{ grabName(item.location) }}</td>
+                                <td>{{ item.source }}</td>
                                 <td>
                                     <a
                                         href="javascript:;"
@@ -167,7 +175,33 @@ export default {
         imageChange(e) {
             this.offer.image_file = e.target.files[0];
             this.offer.image_src = URL.createObjectURL(this.offer.image_file);
-        }
+        },
+        dateDiff(date){
+            var date = new Date(date+' UTC') //lets js know the date is in UTC format so as to convert in respective timezones accordingly
+            return this.$moment(date).fromNow() // a
+        },
+        grabName(categories){
+            var ret = '';
+
+            if(categories){
+                var count = 0;
+                categories.forEach((data) => {
+                    ret += data.name;
+                    count!=(categories.length-1) ? ret += ', ' : ''
+                    count++;
+                });
+            }
+                
+            return ret;
+        },
     }
 };
 </script>
+
+<style>
+    p.desc {
+        display: inline-block;
+        white-space: pre-wrap;
+        width: 200px;
+    }
+</style>
