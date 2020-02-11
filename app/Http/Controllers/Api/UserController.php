@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Brand;
+use App\UserDetail;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +25,9 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "photo" => 'nullable|mimes:jpeg,jpg,bmp,png|max:15072',
+            "photo"  => 'nullable|mimes:jpeg,jpg,bmp,png|max:15072',
+            "dob"    => 'nullable|date',
+            "gender" => 'nullable|string|max:10',
         ]);
 
         if ($validator->fails()) {
@@ -35,7 +38,7 @@ class UserController extends Controller
             ], 422);
         }
         
-        if ($request->fname || $request->lname || $request->phone) {
+        if ($request->fname || $request->lname || $request->phone || $request->dob || $request->gender) {
             $msgs = [
                 "fname.required" => "First Name Cannot be empty"
             ];
@@ -54,6 +57,13 @@ class UserController extends Controller
             $input = $request->only('fname', 'lname', 'phone');
             $update = User::where('id',Auth::id())->update($input);
 
+            $updateDetails = UserDetail::updateOrCreate(
+                ['user_id' => Auth::id()],
+                [
+                    'dob'    => $request->dob,
+                    'gender' => $request->gender
+                ]
+            );
             return response()->json([
                 'status' => '200',
                 'message'=> 'Profile Updated Successfully' 
