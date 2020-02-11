@@ -217,7 +217,7 @@ class UserController extends Controller
     public function followedBrands()
     {
         $brands = Auth::user()->followedBrands()->paginate(10);
-        $brands->setCollection( $brands->getCollection()->makeHidden(['description','logo','status','created_at','updated_at','logo_src','pivot']));
+        $brands->setCollection( $brands->getCollection()->makeHidden(['description','logo','status','created_at','updated_at','pivot']));
         return response()->json($brands);  
     }
 }
