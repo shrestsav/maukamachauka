@@ -30,16 +30,21 @@ class EnquiryController extends Controller
             ], 422);
         }
 
-        if($request->brand_id)
-            $brand = Brand::findOrFail($request->brand_id);
-        elseif($request->offer_id)
-            $brand = Offer::findOrFail($request->offer_id)->brand();
+        $brand_id = $request->brand_id;
+        $offer_id = $request->offer_id;
 
+        if($brand_id)
+            $brand = Brand::findOrFail($brand_id);
+        elseif($offer_id){
+            $brand = Offer::findOrFail($offer_id)->brand()->first();
+            $brand_id = $brand->id;
+        }
+        
         //Store Enquiry in Database
         $enquiry = BrandEnquiry::create([
             'user_id'   =>  Auth::id(),
-            'brand_id'  =>  $request->brand_id,
-            'offer_id'  =>  $request->offer_id,
+            'brand_id'  =>  $brand_id,
+            'offer_id'  =>  $offer_id,
             'message'   =>  $request->message
         ]);
         
