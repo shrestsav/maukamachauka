@@ -17,7 +17,7 @@ class Brand extends Model
         'cp_name',
         'cp_designation',
         'cp_contact',
-        'status,
+        'status',
     ];
 
     protected $appends = ['logo_src', 'followed_status'];
