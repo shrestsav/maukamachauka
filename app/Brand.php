@@ -36,4 +36,14 @@ class Brand extends Model
     {
         return $this->belongsToMany(User::class,'user_brand_preference');
     } 
+
+    public function addresses()
+    {
+        return $this->hasMany(BrandAddress::class);
+    }
+
+    public function banners()
+    {
+        return $this->hasMany(BrandBanner::class);
+    }
 }

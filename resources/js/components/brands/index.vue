@@ -119,6 +119,14 @@
                                     <a
                                         href="javascript:;"
                                         class="table-action"
+                                        title="View Offers"
+                                        @click="viewOffers(item.id)"
+                                    >
+                                        <i class="fas fa-user-edit"></i>
+                                    </a>
+                                    <a
+                                        href="javascript:;"
+                                        class="table-action"
                                         title="Delete New Brand"
                                         @click="deleteNew(item.id)"
                                         v-if="!modifyBrand.edit && item.can_delete"
@@ -156,7 +164,7 @@ export default {
     },
     created() {
         this.$store.commit("changeCurrentPage", "brands");
-        this.$store.commit("changeCurrentMenu", "settingsMenu");
+        this.$store.commit("changeCurrentMenu", "brandMenu");
         this.getBrands();
     },
     mounted() {},
@@ -247,6 +255,9 @@ export default {
                 
             return ret;
         },
+        viewOffers(id){
+            this.$router.push({ name: "offers", query:{brand_id:id}});
+        }
     }
 };
 </script>

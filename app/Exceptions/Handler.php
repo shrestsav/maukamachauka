@@ -57,7 +57,7 @@ class Handler extends ExceptionHandler
             if($exception instanceof NotFoundHttpException){
                 return response()->json([
                     'status' => '404',
-                    'errors' => 'This url does not exists'
+                    'errors' => $exception->getMessage()
                 ], Response::HTTP_NOT_FOUND);
             }
             if($exception instanceof ModelNotFoundException){

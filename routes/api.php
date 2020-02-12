@@ -51,7 +51,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 	Route::get('/user/brand/follow/{brandID}','UserController@followBrand');
 	Route::delete('/user/brand/unFollow/{brandID}','UserController@unfollowBrand');
 	
-	
+	Route::post('/user/brand/enquiry', 'EnquiryController@sendEnquiry');
 	
 	Route::get('/checkRole','AuthController@checkRole');
 

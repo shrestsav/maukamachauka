@@ -13,9 +13,17 @@ class OfferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $offers = Offer::with('categories','brand')->orderBy('created_at', 'DESC')->paginate(10)->makeVisible('image_src');
+        $offers = Offer::with('categories','brand');
+
+        if($request->brand_id)
+            $offers->where('brand_id',$request->brand_id);
+
+        $offers = $offers->orderBy('created_at', 'DESC')->paginate(10);
+        
+        $offers->setCollection( $offers->getCollection()->makeVisible('image_src'));
+
         return response()->json($offers);
     }
 

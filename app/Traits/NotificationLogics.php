@@ -28,7 +28,7 @@ trait NotificationLogics
         Mail::send(new notifyMail($mailData));
         
         return true;
-    }    
+    }      
 
     /**
     * Send Verify Email

@@ -17,7 +17,12 @@ class CreateBrandsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name', 255);
             $table->text('description')->nullable();
-            $table->string('logo');
+            $table->text('url')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('email')->nullable();
+            $table->string('cp_name')->nullable()->comment('Contact Person Name');
+            $table->string('cp_designation')->nullable();
+            $table->string('cp_contact')->nullable();
             $table->smallInteger('status')->default(1)->comment('0: Inactive, 1: Active');
             $table->timestamps();
         });

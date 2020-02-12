@@ -44,8 +44,8 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody class="list">
-                            <tr v-for="(item, index) in offers" v-bind:key="index">
+                        <tbody class="list" v-if="offers.data.length > 0">
+                            <tr v-for="(item, index) in offers.data" v-bind:key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.title }}</td>
                                 <td>
@@ -77,8 +77,12 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <tbody v-else>
+                            <div class="text-center">No Offers Found</div>
+                        </tbody>
                     </table>
                 </div>
+                <pagination :data="offers" @pagination-change-page="getOffers"></pagination>
             </div>
         </div>
     </div>
@@ -100,10 +104,16 @@ export default {
                 id: null,
                 edit: false
             },
+            brand_id:'',
             addBtn: true,
             offers: {},
             errors: {}
         };
+    },
+    created() {
+        if (this.$route.query.brand_id) {
+            this.brand_id = this.$route.query.brand_id
+        }
     },
     mounted() {
         this.$store.commit("changeCurrentPage", "offers");
@@ -111,8 +121,8 @@ export default {
         this.getOffers();
     },
     methods: {
-        getOffers() {
-            axios.get("/offers/").then(response => {
+        getOffers(page = 1) {
+            axios.get("/offers?page="+page+"&brand_id="+this.brand_id).then(response => {
                 this.offers = response.data;
             });
         },
