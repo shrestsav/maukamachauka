@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label
                                     class="form-control-label"
@@ -59,6 +59,29 @@
                             <div class="form-group">
                                 <label
                                     class="form-control-label"
+                                    for="input-email"
+                                >Company Email</label>
+                                <input
+                                    :class="{'not-validated':errors.email}"
+                                    type="text"
+                                    id="input-email"
+                                    placeholder="company@email.com"
+                                    v-model="brand.email"
+                                    class="form-control"
+                                >
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.email"
+                                >
+                                    {{errors.email[0]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label
+                                    class="form-control-label"
                                     for="input-tag"
                                 >Categories / Tags</label>
                                 <multiselect
@@ -76,7 +99,154 @@
                                 >{{ errors.categories[0] }}</div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label
+                                    class="form-control-label"
+                                    for="input-url"
+                                >Website</label>
+                                <input
+                                    :class="{'not-validated':errors.url}"
+                                    type="text"
+                                    id="input-url"
+                                    placeholder="Eg: https://brandofficialwebsite.com"
+                                    v-model="brand.url"
+                                    class="form-control"
+                                >
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.url"
+                                >
+                                    {{errors.url[0]}}
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label
+                                    class="form-control-label"
+                                    for="input-cp_name"
+                                >Contact Person Name</label>
+                                <input
+                                    :class="{'not-validated':errors.cp_name}"
+                                    type="text"
+                                    id="input-cp_name"
+                                    placeholder="Enter contact person name"
+                                    v-model="brand.cp_name"
+                                    class="form-control"
+                                >
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.cp_name"
+                                >
+                                    {{errors.cp_name[0]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label
+                                    class="form-control-label"
+                                    for="input-cp_designation"
+                                >Contact Person Designation</label>
+                                <input
+                                    :class="{'not-validated':errors.cp_designation}"
+                                    type="text"
+                                    id="input-cp_designation"
+                                    placeholder="Enter contact person designation"
+                                    v-model="brand.cp_designation"
+                                    class="form-control"
+                                >
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.cp_designation"
+                                >
+                                    {{errors.cp_designation[0]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label
+                                    class="form-control-label"
+                                    for="input-cp_contact"
+                                >Contact Person Contact</label>
+                                <input
+                                    :class="{'not-validated':errors.cp_contact}"
+                                    type="text"
+                                    id="input-cp_contact"
+                                    placeholder="Enter contact person contact"
+                                    v-model="brand.cp_contact"
+                                    class="form-control"
+                                >
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.cp_contact"
+                                >
+                                    {{errors.cp_contact[0]}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3" v-for="count in 4" :key="count">
+                                <div class="img-select-container">
+                                    <div class="img-select-box banner_image">
+                                        <img
+                                            :src="brand['img'+count+'_src']"
+                                            alt=""/>
+                                    </div>
+                                    <a title="Click to browse image" class="browse_image"
+                                        v-if="brand['img'+count+'_src']==''"
+                                        href=""
+                                        @click.prevent="brand.browseFor='img'+count,$refs.uploadinput.click()">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                    <a title="Click to remove image"
+                                        href=""
+                                        :class="'text-danger remove_image '+(brand['img'+count+'_src']!='' ?'remove_no':'')"
+                                        @click.prevent="clearImg(count)">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-3" v-for="(banner,key) in brand.banner_images" :key="key">
+                                <div class="form-group banner_image">
+                                    <a href="#">
+                                        <img
+                                            :src="banner.src"
+                                            @click="triggerLogoInput"
+                                            :class="{
+                                                'img-not-validated': errors.logo_file
+                                            }"
+                                        />
+                                        <input
+                                            type="file"
+                                            class="custom-file-input"
+                                            lang="en"
+                                            v-on:change="logoChange"
+                                            style="display: none;"
+                                            ref="logo_file"
+                                        />
+                                        <div
+                                            class="invalid-feedback"
+                                            style="display: block;"
+                                            v-if="errors.logo_file"
+                                        >{{ errors.logo_file[0] }}</div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button
+                                    class="btn btn-outline-primary"
+                                    @click="addBannerImage()"
+                                >Add</button>
+                            </div> -->
+                        </div>
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label
                                     class="form-control-label"
@@ -127,8 +297,8 @@ export default {
                 { name: "Sinatra", language: "Ruby" },
                 { name: "Laravel", language: "PHP", $isDisabled: true },
                 { name: "Phoenix", language: "Elixir" }
-			],
-			categories:[],
+            ],
+            categories: [],
             brand: {
                 logo_file: "",
                 logo_src: window.location.origin + "/files/brands/no_image.png"
@@ -141,14 +311,18 @@ export default {
         this.$store.commit("changeCurrentMenu", "settingsMenu");
     },
     mounted() {
-		this.getCategories();
+        this.getCategories();
         this.reset();
-	},
+    },
     methods: {
-		reset(){
+        reset() {
             this.errors = {};
             this.brand = {
-                categories:[],
+                img1_src: window.location.origin + "/files/brands/no_image.png",
+                img2_src: window.location.origin + "/files/brands/no_image.png",
+                img3_src: window.location.origin + "/files/brands/no_image.png",
+                img4_src: window.location.origin + "/files/brands/no_image.png",
+                categories: [],
                 logo_file: "",
                 logo_src: window.location.origin + "/files/brands/no_image.png"
             };
@@ -157,8 +331,8 @@ export default {
             let formData = new FormData();
             for (var key in this.brand) {
                 formData.append(key, this.brand[key]);
-			}
-			formData.append('categories', JSON.stringify(this.brand.categories));
+            }
+            formData.append('categories', JSON.stringify(this.brand.categories));
             axios
                 .post("/brands", formData)
                 .then(response => {
@@ -173,9 +347,15 @@ export default {
                         showNotify("danger", error.response.data.errors[prop]);
                     }
                 });
-		},
-		getCategories(){
-            axios.get("/categories").then(response => this.categories = response.data );
+        },
+        // addBannerImage(){
+        //     this.brand.banner_images.push({
+        //         banner_file: "",
+        //         banner_src: window.location.origin + "/files/brands/no_image.png"
+        //     })
+        // },
+        getCategories() {
+            axios.get("/categories").then(response => this.categories = response.data);
         },
         triggerLogoInput() {
             this.$refs.logo_file.click();
@@ -208,5 +388,8 @@ export default {
 }
 .img-not-validated {
     border: 3px solid red !important;
+}
+.banner_image img{
+    height: 150px;
 }
 </style>

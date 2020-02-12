@@ -17,7 +17,7 @@ class EnquiryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "message"   => 'required|max:1000',
-            "brand_id"  => 'required|numeric|min:0',
+            "brand_id"  => 'nullable|numeric|min:0',
             "offer_id"  => 'nullable|numeric|min:0',
         ]);
 
@@ -29,8 +29,11 @@ class EnquiryController extends Controller
             ], 422);
         }
 
-        $brand = Brand::findOrFail($request->brand_id);
-
+        if($request->brand_id)
+            $brand = Brand::findOrFail($request->brand_id);
+        elseif($request->offer_id)
+            $brand = Offer::findOrFail($request->offer_id)->brand();
+            
         //Store Enquiry in Database
         $enquiry = BrandEnquiry::create([
             'user_id'   =>  Auth::id(),
@@ -38,7 +41,7 @@ class EnquiryController extends Controller
             'offer_id'  =>  $request->offer_id,
             'message'   =>  $request->message
         ]);
-
+        
         //Send Email to Brand
         $mailData = [
             'emailType'  => 'brand_enquiry',

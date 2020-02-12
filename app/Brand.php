@@ -8,6 +8,18 @@ use Auth;
 
 class Brand extends Model
 {
+    protected $fillable = [
+        'name',
+        'description',
+        'url',
+        'logo',
+        'email',
+        'cp_name',
+        'cp_designation',
+        'cp_contact',
+        'status,
+    ];
+
     protected $appends = ['logo_src', 'followed_status'];
 
     protected $hidden = ['followed_status'];

@@ -157,7 +157,7 @@ export default {
                 id: null,
                 edit: false
             },
-            addBtn: true,
+            addBtn: false,
             brands: {},
             errors: {}
         };

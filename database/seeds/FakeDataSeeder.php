@@ -42,7 +42,7 @@ class FakeDataSeeder extends Seeder
                 'description'       => $faker->text,
                 'url' 		        => 'https://brand.com',
                 'logo' 		        => 'empty',
-                'email'             => 'shrestsav@gmail.com',
+                'email'             => 'shrestsav1@gmail.com',
                 'cp_name'           => 'Likita',
                 'cp_designation'    => 'CEO',
                 'cp_contact'        => '9801020304',
