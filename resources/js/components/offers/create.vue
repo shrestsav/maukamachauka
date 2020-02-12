@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label class="form-control-label" for="input-title">Title</label>
                                 <input
@@ -84,6 +84,23 @@
                                     style="display: block;"
                                     v-if="errors.categories"
                                 >{{ errors.categories[0] }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-tag">Brand</label>
+                                <multiselect 
+                                    v-model="offer.brand" 
+                                    :options="brands"
+                                    label="name"
+                                    placeholder="Add Brand" 
+                                    track-by="name"
+                                ></multiselect>
+                                <div
+                                    class="invalid-feedback"
+                                    style="display: block;"
+                                    v-if="errors.brand"
+                                >{{ errors.brand[0] }}</div>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -142,6 +159,7 @@ export default {
         return {
             value: null,
             categories: [],
+            brands:[],
             options: [
                 { name: "Vue.js", language: "JavaScript" },
                 { name: "Rails", language: "Ruby" },
@@ -159,6 +177,7 @@ export default {
     },
     mounted() {
         this.getCategories();
+        this.getBrands();
         this.reset();
     },
     methods: {
@@ -175,12 +194,16 @@ export default {
         getCategories(){
             axios.get("/categories").then(response => this.categories = response.data );
         },
+        getBrands(){
+            axios.get("/brands").then(response => this.brands = response.data );
+        },
         save() {
             let formData = new FormData();
             for (var key in this.offer) {
                 formData.append(key, this.offer[key]);
             }
             formData.append('categories', JSON.stringify(this.offer.categories));
+            formData.append('brand', JSON.stringify(this.offer.brand));
             axios
                 .post("/offers", formData)
                 .then(response => {

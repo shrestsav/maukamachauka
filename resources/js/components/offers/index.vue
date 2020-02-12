@@ -37,6 +37,7 @@
                                 <th>offer Image</th>
                                 <th>Description</th>
                                 <th>Expires In</th>
+                                <th>Brand</th>
                                 <th>Related Tags</th>
                                 <th>Location</th>
                                 <th>Source</th>
@@ -52,6 +53,7 @@
                                 </td>
                                 <td><p class="desc">{{ item.description }}</p></td>
                                 <td>{{ dateDiff(item.expires_in) }}</td>
+                                <td><template v-if="item.brand"> {{ item.brand.name }} </template></td>
                                 <td>{{ grabName(item.categories) }}</td>
                                 <td>{{ grabName(item.location) }}</td>
                                 <td>{{ item.source }}</td>

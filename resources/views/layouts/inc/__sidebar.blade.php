@@ -48,7 +48,7 @@
         </li>
         <li class="nav-item">
           <router-link :to="{ name: 'brands'}" >
-            <a class="nav-link" href="{{url('/v/brands')}}" :href="''" v-bind:class="{active: currentMenu=='brands'}">
+            <a class="nav-link" href="{{url('/v/brands')}}" :href="''" v-bind:class="{active: currentMenu=='brandMenu'}">
               <i class="ni ni-circle-08 text-info"></i>
               <span class="nav-link-text">Brands</span>
             </a>
@@ -56,7 +56,7 @@
         </li>
         <li class="nav-item">
           <router-link :to="{ name: 'offers'}" >
-            <a class="nav-link" href="{{url('/v/offers')}}" :href="''" v-bind:class="{active: currentMenu=='offers'}">
+            <a class="nav-link" href="{{url('/v/offers')}}" :href="''" v-bind:class="{active: currentMenu=='offersMenu'}">
               <i class="ni ni-circle-08 text-info"></i>
               <span class="nav-link-text">Offers</span>
             </a>

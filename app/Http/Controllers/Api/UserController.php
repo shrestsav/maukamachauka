@@ -113,8 +113,8 @@ class UserController extends Controller
     **/
     public function subscribedTags()
     {
-        $tags = Auth::user()->tagsPreferences()->select('id','name')->paginate(10);
-        $tags->setCollection( $tags->getCollection()->makeHidden(['description','image','status','created_at','updated_at','image_src','pivot']));
+        $tags = Auth::user()->tagsPreferences()->get()->makeHidden(['description','image','status','created_at','updated_at','image_src','pivot']);
+        
         return response()->json($tags);  
     }
 
@@ -126,8 +126,10 @@ class UserController extends Controller
     {
         $tags = Category::whereDoesntHave('tagsUsers', function ($query) {
                             $query->where('id', Auth::id());
-                        })->paginate(10);
-        $tags->setCollection( $tags->getCollection()->makeHidden(['description','image','status','created_at','updated_at','image_src','pivot']));
+                        })
+                        ->get()
+                        ->makeHidden(['description','image','status','created_at','updated_at','image_src','pivot']);
+        
         return response()->json($tags);
     }
 

@@ -15,7 +15,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('categories')->orderBy('created_at', 'DESC')->paginate(10)->makeVisible('image_src');
+        $offers = Offer::with('categories','brand')->orderBy('created_at', 'DESC')->paginate(10)->makeVisible('image_src');
         return response()->json($offers);
     }
 
@@ -33,7 +33,9 @@ class OfferController extends Controller
             }
         }
         $request['categories'] = json_decode($request['categories']);
+        $request['brand'] = json_decode($request['brand'], true);
         $validatedData = $request->validate([
+            'brand'        => 'required|array',
             'title'        => 'required|max:50',
             'description'  => 'required|max:500',
             'image_file'   => 'required|mimes:jpeg,bmp,png|max:15360',
@@ -49,6 +51,7 @@ class OfferController extends Controller
         } 
 
         $offer = new Offer();
+        $offer->brand_id = $request->brand['id'];
         $offer->title = $request->title;
         $offer->description = $request->description;
         $offer->expires_in = $request->expires_in;
@@ -60,6 +63,8 @@ class OfferController extends Controller
         $cat_ids = collect($request['categories'])->pluck('id');
         $offer->categories()->attach($cat_ids);
 
+        //Attach Brand to offer
+        
         return response()->json([
             'message'  =>  'Offer saved successfully'
         ]);
