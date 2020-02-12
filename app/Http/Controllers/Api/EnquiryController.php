@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Auth;
 use Mail;
 use App\Brand;
+use App\Offer;
 use App\BrandEnquiry;
 use App\Mail\notifyMail;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class EnquiryController extends Controller
             $brand = Brand::findOrFail($request->brand_id);
         elseif($request->offer_id)
             $brand = Offer::findOrFail($request->offer_id)->brand();
-            
+
         //Store Enquiry in Database
         $enquiry = BrandEnquiry::create([
             'user_id'   =>  Auth::id(),
