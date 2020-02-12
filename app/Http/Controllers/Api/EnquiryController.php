@@ -46,6 +46,8 @@ class EnquiryController extends Controller
             'email'      => $brand->email,
             'subject'    => "New Enquiry",
             'message'    => $request->message,
+            'userEmail'  => Auth::user()->email,
+            'userName'   => Auth::user()->full_name,
         ];
         
         // Notify user in email

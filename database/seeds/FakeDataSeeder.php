@@ -38,10 +38,16 @@ class FakeDataSeeder extends Seeder
 
         for ($i = 1; $i <= $totalBrand; $i++) {
             $brand = Brand::create([ 
-                'name' 		  => $faker->name,
-                'description' => $faker->text,
-                'logo' 		  => 'empty',
-                'status' 	  => 1,
+                'name' 		        => $faker->name,
+                'description'       => $faker->text,
+                'url' 		        => 'https://brand.com',
+                'logo' 		        => 'empty',
+                'email'             => 'shrestsav@gmail.com',
+                'cp_name'           => 'Likita',
+                'cp_designation'    => 'CEO',
+                'cp_contact'        => '9801020304',
+                'logo' 		        => 'empty',
+                'status' 	        => 1,
             ]);
             // $randCatIDs = [];
             // $arrLength = rand(1,4);
