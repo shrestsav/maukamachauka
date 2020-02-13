@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Brand;
-use Illuminate\Http\Request;
+use App\Category;
+use App\BrandBanner;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class BrandController extends Controller
 {
@@ -50,17 +52,57 @@ class BrandController extends Controller
 
         $brand = new Brand();
         $brand->name = $request->name;
-        $brand->description = $request->description;
+        $brand->email = $request->email;
+        $brand->url = $request->url;
         $brand->logo = $fileName;
+        $brand->cp_name = $request->cp_name;
+        $brand->cp_designation = $request->cp_designation;
+        $brand->cp_contact = $request->cp_contact;
+        $brand->description = $request->description;
         $brand->save();
 
         //Attaching categories to the brands
         $cat_ids = collect($request['categories'])->pluck('id');
         $brand->categories()->attach($cat_ids);
 
+        //Save Brand Banner Images
+        for($i=1; $i<=5; $i++){
+            if ($request->hasFile('img'.$i.'_file')) {
+                $rand = Str::uuid();
+                $image = $request->file('img'.$i.'_file');
+                $fileName = $rand.'_large.'.$image->getClientOriginalExtension();
+                $this->storeImage($image, $brand->id, $fileName);
+
+                $brandBanner = BrandBanner::create([
+                    'brand_id'  =>  $brand->id,
+                    'image'     =>  $fileName
+                ]);                
+            }
+        }
+
         return response()->json([
             'message'  =>  'brand saved successfully'
         ]);
+    }
+
+    /**
+     * Image Processing with Intervention
+     */
+    public function storeImage($image, $pID, $fileName)
+    {
+        $image = Image::make($image);
+
+        // prevent possible upsizing
+        $image->resize(null, 800, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        $uploadDirectory = public_path('files'.DS.'brands');
+        if (!file_exists($uploadDirectory)) {
+            \File::makeDirectory($uploadDirectory, 0755, true);
+        }
+        $image->save($uploadDirectory.DS.$fileName,80);
     }
 
     /**

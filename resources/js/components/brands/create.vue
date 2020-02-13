@@ -191,83 +191,71 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-3" v-for="count in 4" :key="count">
-                                <div class="img-select-container">
-                                    <div class="img-select-box banner_image">
-                                        <img
-                                            :src="brand['img'+count+'_src']"
-                                            alt=""/>
-                                    </div>
-                                    <a title="Click to browse image" class="browse_image"
-                                        v-if="brand['img'+count+'_src']==''"
-                                        href=""
-                                        @click.prevent="brand.browseFor='img'+count,$refs.uploadinput.click()">
-                                        <i class="fas fa-plus"></i>
-                                    </a>
-                                    <a title="Click to remove image"
-                                        href=""
-                                        :class="'text-danger remove_image '+(brand['img'+count+'_src']!='' ?'remove_no':'')"
-                                        @click.prevent="clearImg(count)">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- <div class="col-md-3" v-for="(banner,key) in brand.banner_images" :key="key">
-                                <div class="form-group banner_image">
-                                    <a href="#">
-                                        <img
-                                            :src="banner.src"
-                                            @click="triggerLogoInput"
-                                            :class="{
-                                                'img-not-validated': errors.logo_file
-                                            }"
-                                        />
-                                        <input
-                                            type="file"
-                                            class="custom-file-input"
-                                            lang="en"
-                                            v-on:change="logoChange"
-                                            style="display: none;"
-                                            ref="logo_file"
-                                        />
-                                        <div
-                                            class="invalid-feedback"
-                                            style="display: block;"
-                                            v-if="errors.logo_file"
-                                        >{{ errors.logo_file[0] }}</div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <button
-                                    class="btn btn-outline-primary"
-                                    @click="addBannerImage()"
-                                >Add</button>
-                            </div> -->
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label
-                                    class="form-control-label"
-                                    for="input-name"
-                                >About</label>
-                                <textarea
-                                    rows="4"
-                                    :class="{'not-validated':errors.description}"
-                                    class="form-control"
-                                    placeholder="Enter Description"
-                                    v-model="brand.description"
-                                >
-								</textarea>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <label
+                        class="form-control-label"
+                        for="input-cp_designation"
+                    >Banner Images</label>
+                    <div class="row">
+
+                        <input
+                            type="file"
+                            @change="onFilePicked"
+                            ref="uploadinput"
+                            style="display:none;"
+                        />
+                        <div
+                            class="col-sm-2"
+                            v-for="count in 5"
+                            :key="count"
+                        >
+                            <div class="img-select-container">
                                 <div
-                                    class="invalid-feedback"
-                                    style="display: block;"
-                                    v-if="errors.description"
+                                    class="img-select-box banner_image"
+                                    @click.prevent="brand.browseFor='img'+count,$refs.uploadinput.click()"
                                 >
-                                    {{errors.description[0]}}
+                                    <img
+                                        :src="brand['img'+count+'_src']"
+                                        alt=""
+                                    />
                                 </div>
+                                <a
+                                    title="Click to remove image"
+                                    href=""
+                                    :class="'text-danger remove_image '+(brand['img'+count+'_src']!='' ?'remove_no':'')"
+                                    @click.prevent="clearImg(count)"
+                                >
+                                    <i class="fa fa-times"></i>
+                                </a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label
+                            class="form-control-label"
+                            for="input-name"
+                        >About</label>
+                        <textarea
+                            rows="4"
+                            :class="{'not-validated':errors.description}"
+                            class="form-control"
+                            placeholder="Enter Description"
+                            v-model="brand.description"
+                        >
+                        </textarea>
+                        <div
+                            class="invalid-feedback"
+                            style="display: block;"
+                            v-if="errors.description"
+                        >
+                            {{errors.description[0]}}
                         </div>
                     </div>
                 </div>
@@ -290,19 +278,8 @@ export default {
     components: { Multiselect },
     data() {
         return {
-            value: null,
-            options: [
-                { name: "Vue.js", language: "JavaScript" },
-                { name: "Rails", language: "Ruby" },
-                { name: "Sinatra", language: "Ruby" },
-                { name: "Laravel", language: "PHP", $isDisabled: true },
-                { name: "Phoenix", language: "Elixir" }
-            ],
             categories: [],
-            brand: {
-                logo_file: "",
-                logo_src: window.location.origin + "/files/brands/no_image.png"
-            },
+            brand: {},
             errors: {}
         };
     },
@@ -322,6 +299,7 @@ export default {
                 img2_src: window.location.origin + "/files/brands/no_image.png",
                 img3_src: window.location.origin + "/files/brands/no_image.png",
                 img4_src: window.location.origin + "/files/brands/no_image.png",
+                img5_src: window.location.origin + "/files/brands/no_image.png",
                 categories: [],
                 logo_file: "",
                 logo_src: window.location.origin + "/files/brands/no_image.png"
@@ -363,7 +341,49 @@ export default {
         logoChange(e) {
             this.brand.logo_file = e.target.files[0];
             this.brand.logo_src = URL.createObjectURL(this.brand.logo_file);
-        }
+        },
+        onFilePicked(e) {
+            const file = e.target.files[0];
+            // console.log(file)
+            this.processFile(file);
+            e.target.value = '';
+        },
+        clearImg(count) {
+            this.brand['img' + count + '_src'] = window.location.origin + "/files/brands/no_image.png"
+            this.brand['img' + count + '_file'] = ''
+        },
+        processFile(file) {
+            if (!file.type.includes("image/")) {
+                return;
+            }
+            let $this = this;
+            if (typeof FileReader === "function") {
+                const reader = new FileReader();
+                reader.onload = event => {
+                    // let file = this.$refs.uploadinput.files[0];
+                    try {
+                        if ($this.brand.browseFor.length > 0) {
+                            $this.brand[$this.brand.browseFor + '_src'] = URL.createObjectURL(file);
+                            $this.brand[$this.brand.browseFor + '_file'] = file;
+                        }
+                        else {
+                            // looping for 4 images
+                            for (var j = 1; j <= 4; j++) {
+                                if ($this.brand['img' + j + '_src'] == '') {
+                                    $this.brand['img' + j + '_src'] = URL.createObjectURL(file);
+                                    $this.brand['img' + j + '_file'] = file
+                                    throw Error("Done");
+                                }
+                            }
+                        }
+                        $this.brand.browseFor = '';
+                    } catch (e) {
+                        console.log(e);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        },
     },
     computed: {
         fields() {
@@ -389,7 +409,7 @@ export default {
 .img-not-validated {
     border: 3px solid red !important;
 }
-.banner_image img{
+.banner_image img {
     height: 150px;
 }
 </style>

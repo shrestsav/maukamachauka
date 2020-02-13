@@ -60,7 +60,7 @@ class OfferController extends Controller
     {
         $brand = Brand::findOrFail($brandID);
 
-        $offers = Offer::where('brand_id', $brandID)->paginate(config('settings.rows'));
+        $offers = Offer::with('categories:id,name','brand:id,name')->where('brand_id', $brandID)->where('expires_in','>=',Date('Y-m-d H:i:s'))->paginate(config('settings.rows'));
 
         $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
         
@@ -73,7 +73,7 @@ class OfferController extends Controller
     **/
     public function categoryOffers($catID)
     {
-        $offers = Category::findOrFail($catID)->offers()->paginate(config('settings.rows'));
+        $offers = Category::findOrFail($catID)->offers()->with('categories:id,name','brand:id,name')->paginate(config('settings.rows'));
 
         $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
 
