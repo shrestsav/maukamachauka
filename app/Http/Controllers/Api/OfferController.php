@@ -47,7 +47,7 @@ class OfferController extends Controller
     **/
     public function brandDetails($brandID)
     {
-        $brand = Brand::with('categories')->findOrFail($brandID)->makeVisible('followed_status')->makeHidden('followedBy');
+        $brand = Brand::with('categories','banners:brand_id,image')->findOrFail($brandID)->makeVisible('followed_status')->makeHidden('followedBy');
         
         return response()->json($brand);
     }

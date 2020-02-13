@@ -5,6 +5,7 @@ use Faker\Provider\Base;
 use App\Category;
 use App\Brand;
 use App\Offer;
+use App\BrandBanner;
 
 class FakeDataSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class FakeDataSeeder extends Seeder
         DB::table('categories')->truncate();
         DB::table('offers')->truncate();
         DB::table('offer_category')->truncate();
+        DB::table('brand_banners')->truncate();
         
         $faker = Faker\Factory::create();
 
@@ -49,6 +51,14 @@ class FakeDataSeeder extends Seeder
                 'logo' 		        => 'empty',
                 'status' 	        => 1,
             ]);
+
+            for($im = 0; $im < 5; $im++){
+                $brandBanner = BrandBanner::create([
+                    'brand_id'  =>  $brand->id,
+                    'image'     =>  'empty'
+                ]);
+            }
+            
             // $randCatIDs = [];
             // $arrLength = rand(1,4);
             // for($d = 0; $d<$arrLength; $d++){
