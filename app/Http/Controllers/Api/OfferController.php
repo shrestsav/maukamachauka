@@ -28,7 +28,7 @@ class OfferController extends Controller
                                 'liked_by',
                                 'created_at')
                         ->where('expires_in','>=',Date('Y-m-d H:i:s'))
-                        ->with('categories:id,name','brand:id,name')
+                        ->with('categories:id,name,image','brand:id,name,logo')
                         ->paginate(config('settings.rows'));
 
         $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
@@ -73,7 +73,7 @@ class OfferController extends Controller
     **/
     public function categoryOffers($catID)
     {
-        $offers = Category::findOrFail($catID)->offers()->with('categories:id,name','brand:id,name')->paginate(config('settings.rows'));
+        $offers = Category::findOrFail($catID)->offers()->with('categories:id,name,image','brand:id,name,logo')->paginate(config('settings.rows'));
 
         $offers->setCollection( $offers->getCollection()->makeVisible(['liked_status','favorite_status','likes_count']));
 
@@ -205,7 +205,7 @@ class OfferController extends Controller
         $offers = Offer::search($request->search)->paginate(20);
 
         $offers->setCollection( $offers->getCollection()->load('categories:id,name','brand:id,name')->makeVisible(['liked_status','favorite_status','likes_count']));
-        
+
         return response()->json($offers); 
     }
 
@@ -216,7 +216,7 @@ class OfferController extends Controller
     {
         $offers = Offer::search($search)->paginate(20);
 
-        $offers->setCollection( $offers->getCollection()->load('categories:id,name','brand:id,name')->makeVisible(['liked_status','favorite_status','likes_count']));
+        $offers->setCollection( $offers->getCollection()->load('categories:id,name,image','brand:id,name,logo')->makeVisible(['liked_status','favorite_status','likes_count']));
         
         return response()->json($offers); 
     }
