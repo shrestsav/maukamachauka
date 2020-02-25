@@ -2,12 +2,15 @@
 
 namespace App;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Auth;
 
 class Offer extends Model
 {
+    use Searchable;
+
 	protected $fillable = ['category_id','brand_id','title','description','image','status','liked_by','source'];
 
     protected $appends = ['image_src','likes_count','liked_status','favorite_status'];
@@ -21,6 +24,32 @@ class Offer extends Model
         'location'  => 'array',
         'expires_in'=> 'datatime'
     ];
+
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'offers';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        $array['brand'] = $this->brand->makeHidden(['created_at','updated_at']);
+        $array['categories'] = $this->categories->makeHidden(['created_at','updated_at','pivot']);
+        // Customize array...
+
+        return $array;
+    }
 
     public function getLikedStatusAttribute($value)
     {

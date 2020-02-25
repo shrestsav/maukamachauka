@@ -35,6 +35,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function() {
 
 	Route::get('/offer/favorites','OfferController@userFavoriteOffers');
 
+	Route::post('/offer/search','OfferController@search');
+
 	Route::get('/brands/{brandID}','OfferController@brandDetails');
 	Route::get('/brand/offers/{brandID}','OfferController@brandOffers');
 	Route::get('/category/offers/{catID}','OfferController@categoryOffers');
