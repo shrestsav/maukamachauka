@@ -207,4 +207,14 @@ class OfferController extends Controller
         return response()->json($offers); 
     }
 
+    /**
+     * Search Offers TEST
+    **/
+    public function searchTEST($search)
+    {
+        $offers = Offer::search($search)->paginate(20);
+
+        return response()->json($offers); 
+    }
+
 }

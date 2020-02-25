@@ -12,5 +12,5 @@ class BrandAddress extends Model
         'city',
         'address',
         'coordinates'
-    ]
+    ];
 }

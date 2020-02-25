@@ -56,4 +56,6 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/markAsRead/{notificationId}','UserController@markAsRead');
 	Route::get('/markAllAsRead','UserController@markAllAsRead');
 
+	Route::get('/test/search/{search}','Api\OfferController@searchTEST');
+
 });
