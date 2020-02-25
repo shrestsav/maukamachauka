@@ -42,9 +42,10 @@ class Category extends Model
 
     public function getImageSrcAttribute()
     {
-        $no_image = 'https://loremflickr.com/320/240?'.Str::random(5);
-          
-        $src = $this->image ? asset('files/categories/'.$this->image) : $no_image;
+        $src = 'https://loremflickr.com/320/240?'.Str::random(5);
+        
+        if($this->image != 'empty')
+            $src = asset('files/categories/'.$this->image);
   		
         return $src;
     }
