@@ -204,6 +204,8 @@ class OfferController extends Controller
     {
         $offers = Offer::search($request->search)->paginate(20);
 
+        $offers->setCollection( $offers->getCollection()->load('categories:id,name','brand:id,name')->makeVisible(['liked_status','favorite_status','likes_count']));
+        
         return response()->json($offers); 
     }
 
@@ -214,6 +216,8 @@ class OfferController extends Controller
     {
         $offers = Offer::search($search)->paginate(20);
 
+        $offers->setCollection( $offers->getCollection()->load('categories:id,name','brand:id,name')->makeVisible(['liked_status','favorite_status','likes_count']));
+        
         return response()->json($offers); 
     }
 
