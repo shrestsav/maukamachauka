@@ -44,10 +44,10 @@ class Offer extends Model
     {
         $array = $this->toArray();
 
-        $array['_geoloc'] = [
-            'lat' => $array['location'][0]['lat'],
-            'lng' => $array['location'][0]['long'],
-        ];
+        // $array['_geoloc'] = [
+        //     'lat' => $array['location'][0]['lat'],
+        //     'lng' => $array['location'][0]['long'],
+        // ];
 
         $array['brand'] = $this->brand->makeHidden(['created_at','updated_at']);
         $array['categories'] = $this->categories->makeHidden(['created_at','updated_at','pivot']);
