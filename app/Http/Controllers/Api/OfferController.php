@@ -25,6 +25,7 @@ class OfferController extends Controller
                                 'liked_by',
                                 'expires_in',
                                 'location',
+                                'image',
                                 'liked_by',
                                 'created_at')
                         ->where('expires_in','>=',Date('Y-m-d H:i:s'))
