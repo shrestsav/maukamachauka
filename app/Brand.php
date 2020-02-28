@@ -26,9 +26,10 @@ class Brand extends Model
 
     public function getLogoSrcAttribute()
     {
-  		// $src = $this->image ? asset('files/categories/'.$this->image) : asset('files/categories/no_image.png');
-  		
-        return "https://loremflickr.com/320/240?".Str::random(5);
+        $no_image = "https://dummyimage.com/600x400/6e6e6e/ffffff&text=NO+IMAGE";
+  		$src = $this->logo ? asset('files/brands/'.$this->logo) : $no_image;
+
+        return $src;
     }
 
     public function getFollowedStatusAttribute()

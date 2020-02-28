@@ -80,7 +80,6 @@ class Offer extends Model
 
     public function getImageSrcAttribute()
     {
-        // $no_image = asset('files/categories/no_image.png');
         $no_image = "https://dummyimage.com/600x400/6e6e6e/ffffff&text=NO+IMAGE";
   		$src = $this->image ? asset('files/offers/'.$this->image) : $no_image;
 
